@@ -247,7 +247,7 @@ export async function loadVoiceClip(): Promise<Blob | null> {
     if (!record) return null;
     return new Blob([record.bytes], { type: record.type });
   } catch (error) {
-    console.warn('[Sokuji] [voiceClipStorage] Could not read the stored clip:', error);
+    console.warn('[GM MeetMind] [voiceClipStorage] Could not read the stored clip:', error);
     return null;
   }
 }
@@ -259,7 +259,7 @@ export async function clearVoiceClip(): Promise<void> {
     const db = await getDb();
     await db.delete(STORE, KEY);
   } catch (error) {
-    console.warn('[Sokuji] [voiceClipStorage] Could not clear the stored clip:', error);
+    console.warn('[GM MeetMind] [voiceClipStorage] Could not clear the stored clip:', error);
   }
 }
 
@@ -1560,7 +1560,7 @@ export async function prepareManagedVoice(deps: PrepareManagedVoiceDeps): Promis
       if (voice.status === 'failed') return { ok: false, reason: 'voice_failed' };
     }
   } catch (error) {
-    console.error('[Sokuji] [prepareManagedVoice] Unexpected failure:', error);
+    console.error('[GM MeetMind] [prepareManagedVoice] Unexpected failure:', error);
     return { ok: false, reason: 'unavailable' };
   }
 
@@ -1579,7 +1579,7 @@ export async function prepareManagedVoice(deps: PrepareManagedVoiceDeps): Promis
       return { ok: true, value };
     } catch (error) {
       if (!(error instanceof SonioxVoicesError)) {
-        console.error('[Sokuji] [prepareManagedVoice] ensure failed:', error);
+        console.error('[GM MeetMind] [prepareManagedVoice] ensure failed:', error);
         return { ok: false, reason: 'unavailable' };
       }
       if (error.errorType === 'clip_required' && !opts.retriedClip) {

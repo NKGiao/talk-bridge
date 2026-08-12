@@ -97,7 +97,7 @@ The `savedResumptionHandle = undefined` clear inside the success branch is prese
 
 ```typescript
 onclose: (event: CloseEvent) => {
-  console.info('[Sokuji] [GeminiClient] Session closed', event);
+  console.info('[GM MeetMind] [GeminiClient] Session closed', event);
   this.session = null;
 
   if (this.isReconnecting) return;
@@ -144,10 +144,10 @@ The dev-only `Ctrl+Shift+G` helper currently refuses to fire if there is no save
 ```typescript
 simulateDisconnectForTesting(): void {
   if (!this.session) {
-    console.warn('[Sokuji] [GeminiClient] Cannot simulate disconnect: no session');
+    console.warn('[GM MeetMind] [GeminiClient] Cannot simulate disconnect: no session');
     return;
   }
-  console.info('[Sokuji] [GeminiClient] DEV: Simulating disconnect to test reconnection');
+  console.info('[GM MeetMind] [GeminiClient] DEV: Simulating disconnect to test reconnection');
   this.session.close();
 }
 ```

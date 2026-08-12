@@ -234,7 +234,7 @@ function defaultDeps() {
     execFileSync: require('child_process').execFileSync,
     now: () => Date.now(),
     env: process.env,
-    log: (...a) => console.log('[Sokuji] [SandboxRecovery]', ...a),
+    log: (...a) => console.log('[GM MeetMind] [SandboxRecovery]', ...a),
     // Runs before every app.exit()/relaunch this module triggers. app.exit()
     // skips before-quit/will-quit, so main.js's cleanupAndExit (which stops the
     // native sidecar and releases its Windows file locks) would otherwise never

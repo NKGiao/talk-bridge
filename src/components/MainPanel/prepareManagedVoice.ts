@@ -101,7 +101,7 @@ export async function prepareManagedVoice(deps: PrepareManagedVoiceDeps): Promis
       if (voice.status === 'failed') return { ok: false, reason: 'voice_failed' };
     }
   } catch (error) {
-    console.error('[Sokuji] [prepareManagedVoice] Unexpected failure:', error);
+    console.error('[GM MeetMind] [prepareManagedVoice] Unexpected failure:', error);
     return { ok: false, reason: 'unavailable' };
   }
 
@@ -127,7 +127,7 @@ export async function prepareManagedVoice(deps: PrepareManagedVoiceDeps): Promis
       return { ok: true, value };
     } catch (error) {
       if (!(error instanceof SonioxVoicesError)) {
-        console.error('[Sokuji] [prepareManagedVoice] ensure failed:', error);
+        console.error('[GM MeetMind] [prepareManagedVoice] ensure failed:', error);
         return { ok: false, reason: 'unavailable' };
       }
       if (error.errorType === 'clip_required' && !opts.retriedClip) {

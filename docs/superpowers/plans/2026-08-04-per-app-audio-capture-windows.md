@@ -1201,7 +1201,7 @@ export class AppAudioRecorder implements IParticipantAudioRecorder {
   async begin(options?: ParticipantAudioOptions): Promise<boolean> {
     const deviceId = options?.deviceId;
     if (!deviceId) {
-      console.error('[Sokuji] [AppAudioRecorder] A deviceId is required');
+      console.error('[GM MeetMind] [AppAudioRecorder] A deviceId is required');
       return false;
     }
 
@@ -1212,7 +1212,7 @@ export class AppAudioRecorder implements IParticipantAudioRecorder {
 
     const result = await window.electron.invoke('start-app-audio-capture', deviceId);
     if (!result?.ok) {
-      console.error('[Sokuji] [AppAudioRecorder] Failed to start capture:', result?.error);
+      console.error('[GM MeetMind] [AppAudioRecorder] Failed to start capture:', result?.error);
       await this.end();
       return false;
     }
@@ -1244,7 +1244,7 @@ export class AppAudioRecorder implements IParticipantAudioRecorder {
     try {
       await window.electron.invoke('stop-app-audio-capture');
     } catch (e) {
-      console.warn('[Sokuji] [AppAudioRecorder] Failed to stop capture:', e);
+      console.warn('[GM MeetMind] [AppAudioRecorder] Failed to stop capture:', e);
     }
     this.callback = null;
     this.leftover = new Uint8Array(0);
@@ -1280,7 +1280,7 @@ export class AppAudioRecorder implements IParticipantAudioRecorder {
 
   private onHelperEvent(payload: { event?: string }): void {
     if (payload?.event === 'exit' || payload?.event === 'error') {
-      console.warn('[Sokuji] [AppAudioRecorder] Capture helper reported:', payload);
+      console.warn('[GM MeetMind] [AppAudioRecorder] Capture helper reported:', payload);
       this.onLost?.();
     }
   }
@@ -1417,16 +1417,16 @@ Add the method beside `startDeviceCaptureRecording`:
     callback: AudioRecordingCallback
   ): Promise<void> {
     try {
-      console.info(`[Sokuji] [ModernBrowserAudio] Starting application capture for ${deviceId}`);
+      console.info(`[GM MeetMind] [ModernBrowserAudio] Starting application capture for ${deviceId}`);
       const recorder = new AppAudioRecorder(24000);
       this.systemAudioRecorder = recorder;
       this.systemAudioCallback = callback;
 
       recorder.onLost = () => {
-        console.warn('[Sokuji] [ModernBrowserAudio] Capture helper lost; falling back to system audio');
+        console.warn('[GM MeetMind] [ModernBrowserAudio] Capture helper lost; falling back to system audio');
         this.currentCaptureMode = 'system';
         this.startSystemAudioRecording(callback).catch((e) =>
-          console.error('[Sokuji] [ModernBrowserAudio] Fallback to system audio failed:', e));
+          console.error('[GM MeetMind] [ModernBrowserAudio] Fallback to system audio failed:', e));
       };
 
       const success = await recorder.begin({ deviceId });
@@ -1441,9 +1441,9 @@ Add the method beside `startDeviceCaptureRecording`:
       });
 
       this.systemAudioRecordingActive = true;
-      console.info('[Sokuji] [ModernBrowserAudio] Application capture started');
+      console.info('[GM MeetMind] [ModernBrowserAudio] Application capture started');
     } catch (error) {
-      console.error('[Sokuji] [ModernBrowserAudio] Failed to start application capture:', error);
+      console.error('[GM MeetMind] [ModernBrowserAudio] Failed to start application capture:', error);
       await this.stopSystemAudioRecording();
       throw error;
     }

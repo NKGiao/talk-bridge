@@ -21,7 +21,7 @@ OpenAI が提供する Realtime API ファミリの中で、**Speech-to-Speech �
 1. **`gpt-realtime-translate`** — 翻訳に特化した専用モデル
 2. **`gpt-realtime-2`**（+ `reasoning.effort`） — 汎用 Realtime モデルを翻訳役にプロンプトする方式
 
-リアルタイム AI 翻訳アプリ **[Sokuji](https://github.com/kizuna-ai-lab/sokuji)** ではこの両方を実装し、ユーザーが UI から切り替えられるようにしています。本記事は、1 ヶ月以上両方を本番で使い分けてわかった**「結局どちらを使うべきか」**の判断材料を、ユースケース別マトリクスとして整理します。
+リアルタイム AI 翻訳アプリ **[GM MeetMind](https://github.com/kizuna-ai-lab/sokuji)** ではこの両方を実装し、ユーザーが UI から切り替えられるようにしています。本記事は、1 ヶ月以上両方を本番で使い分けてわかった**「結局どちらを使うべきか」**の判断材料を、ユースケース別マトリクスとして整理します。
 
 シリーズの第 3 回（最終回）：
 

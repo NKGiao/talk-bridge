@@ -102,7 +102,7 @@ function readBlobAsArrayBuffer(blob: Blob): Promise<ArrayBuffer> {
  *  the exact bug the `accountId` field exists to prevent. */
 export async function saveVoiceClip(accountId: string, blob: Blob): Promise<void> {
   if (!accountId) {
-    throw new Error('[Sokuji] [voiceClipStorage] Refusing to store a reference clip with no owning account');
+    throw new Error('[GM MeetMind] [voiceClipStorage] Refusing to store a reference clip with no owning account');
   }
   const db = await getDb();
   const record: StoredClip = {
@@ -131,7 +131,7 @@ export async function loadVoiceClip(accountId: string | null | undefined): Promi
     if (!record || record.accountId !== accountId) return null;
     return new Blob([record.bytes], { type: record.type });
   } catch (error) {
-    console.warn('[Sokuji] [voiceClipStorage] Could not read the stored clip:', error);
+    console.warn('[GM MeetMind] [voiceClipStorage] Could not read the stored clip:', error);
     return null;
   }
 }

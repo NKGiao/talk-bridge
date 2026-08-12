@@ -8,7 +8,7 @@ published: false
 
 ## はじめに
 
-このシリーズでは、リアルタイム AI 翻訳アプリ **[Sokuji](https://github.com/kizuna-ai-lab/sokuji)** の開発を通じて、ブラウザ上で**完全オフラインの音声→音声（Speech-to-Speech）翻訳パイプライン**を構築してきました。
+このシリーズでは、リアルタイム AI 翻訳アプリ **[GM MeetMind](https://github.com/kizuna-ai-lab/sokuji)** の開発を通じて、ブラウザ上で**完全オフラインの音声→音声（Speech-to-Speech）翻訳パイプライン**を構築してきました。
 
 1. [第1回：ASR（音声認識）](https://zenn.dev/shinonome_tk/articles/7b27eac0eb7ab6) — sherpa-onnx WASM + VAD
 2. [第2回：翻訳](https://zenn.dev/shinonome_tk/articles/1415377d126772) — Opus-MT / Qwen / TranslateGemma + Transformers.js

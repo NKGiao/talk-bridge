@@ -188,11 +188,11 @@ export class PalabraAIClient implements IClient {
         }
       });
 
-      console.info("[Sokuji] [PalabraAIClient] Validating credentials via sessions API, response status:", response.status);
+      console.info("[GM MeetMind] [PalabraAIClient] Validating credentials via sessions API, response status:", response.status);
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.warn("[Sokuji] [PalabraAIClient] Validation failed:", errorData);
+        console.warn("[GM MeetMind] [PalabraAIClient] Validation failed:", errorData);
         // Palabra's error shape is { ok: false, errors: [{ title, detail, ... }] };
         // the flat error.message form is kept as a fallback for older responses.
         const firstError = errorData?.errors?.[0];
@@ -205,7 +205,7 @@ export class PalabraAIClient implements IClient {
 
       // Parse successful response
       const data = await response.json();
-      console.info("[Sokuji] [PalabraAIClient] Credentials validation successful, sessions retrieved:", data.sessions?.length || 0);
+      console.info("[GM MeetMind] [PalabraAIClient] Credentials validation successful, sessions retrieved:", data.sessions?.length || 0);
       
       return {
         valid: true,
@@ -214,7 +214,7 @@ export class PalabraAIClient implements IClient {
       };
 
     } catch (error: any) {
-      console.error("[Sokuji] [PalabraAIClient] Validation error:", error);
+      console.error("[GM MeetMind] [PalabraAIClient] Validation error:", error);
       return {
         valid: false,
         message: error.message || i18n.t('settings.errorValidatingApiKey'),
@@ -224,7 +224,7 @@ export class PalabraAIClient implements IClient {
   }
 
   async connect(config: SessionConfig): Promise<void> {
-    console.info("[Sokuji] [PalabraAIClient] Connecting to PalabraAI", config);
+    console.info("[GM MeetMind] [PalabraAIClient] Connecting to PalabraAI", config);
     
     // Validate that this is a PalabraAI session config
     if (!isPalabraAISessionConfig(config)) {
@@ -250,10 +250,10 @@ export class PalabraAIClient implements IClient {
       await this.startTranslation();
       
       this.isConnectedState = true;
-      console.info("[Sokuji] [PalabraAIClient] Connected successfully");
+      console.info("[GM MeetMind] [PalabraAIClient] Connected successfully");
       
     } catch (error) {
-      console.error("[Sokuji] [PalabraAIClient] Connection error:", error);
+      console.error("[GM MeetMind] [PalabraAIClient] Connection error:", error);
       throw error;
     }
   }
@@ -282,9 +282,9 @@ export class PalabraAIClient implements IClient {
           });
           
           await this.room.localParticipant.publishData(message, { reliable: true });
-          console.info("[Sokuji] [PalabraAIClient] End task sent");
+          console.info("[GM MeetMind] [PalabraAIClient] End task sent");
         } catch (error) {
-          console.warn("[Sokuji] [PalabraAIClient] Error sending end_task:", error);
+          console.warn("[GM MeetMind] [PalabraAIClient] Error sending end_task:", error);
         }
       }
       
@@ -306,10 +306,10 @@ export class PalabraAIClient implements IClient {
       this.sessionConfig = null;
       this.conversationItems = [];
       
-      console.info("[Sokuji] [PalabraAIClient] Disconnected successfully");
+      console.info("[GM MeetMind] [PalabraAIClient] Disconnected successfully");
       
     } catch (error) {
-      console.error("[Sokuji] [PalabraAIClient] Disconnect error:", error);
+      console.error("[GM MeetMind] [PalabraAIClient] Disconnect error:", error);
       throw error;
     }
   }
@@ -336,7 +336,7 @@ export class PalabraAIClient implements IClient {
 
   appendInputAudio(audioData: Int16Array): void {
     if (!this.audioContext || !this.audioDestination) {
-      console.warn("[Sokuji] [PalabraAIClient] Audio context not initialized");
+      console.warn("[GM MeetMind] [PalabraAIClient] Audio context not initialized");
       return;
     }
     
@@ -360,13 +360,13 @@ export class PalabraAIClient implements IClient {
         // Handle Uint8Array or other TypedArray
         int16Array = new Int16Array(data.buffer, data.byteOffset, data.byteLength / 2);
       } else {
-        console.warn("[Sokuji] [PalabraAIClient] Invalid audio data type:", typeof data, data);
+        console.warn("[GM MeetMind] [PalabraAIClient] Invalid audio data type:", typeof data, data);
         return;
       }
       
       // Check if we have valid audio data
       if (!int16Array || int16Array.length === 0) {
-        console.warn("[Sokuji] [PalabraAIClient] Empty audio data received");
+        console.warn("[GM MeetMind] [PalabraAIClient] Empty audio data received");
         return;
       }
       
@@ -388,7 +388,7 @@ export class PalabraAIClient implements IClient {
       source.start();
       
     } catch (error) {
-      console.error("[Sokuji] [PalabraAIClient] Error processing audio data:", error);
+      console.error("[GM MeetMind] [PalabraAIClient] Error processing audio data:", error);
     }
   }
 
@@ -455,7 +455,7 @@ export class PalabraAIClient implements IClient {
     const data = await response.json();
     this.sessionConfig = data.data;
     this.currentSessionId = this.sessionConfig?.id || null;
-    console.info("[Sokuji] [PalabraAIClient] Session created:", this.sessionConfig);
+    console.info("[GM MeetMind] [PalabraAIClient] Session created:", this.sessionConfig);
   }
 
   private async connectToRoom(): Promise<void> {
@@ -473,7 +473,7 @@ export class PalabraAIClient implements IClient {
     
     // Connect to the room
     await this.room.connect(this.sessionConfig.webrtc_url, this.sessionConfig.publisher);
-    console.info("[Sokuji] [PalabraAIClient] Connected to WebRTC room");
+    console.info("[GM MeetMind] [PalabraAIClient] Connected to WebRTC room");
   }
 
   private async setupAudio(): Promise<void> {
@@ -505,7 +505,7 @@ export class PalabraAIClient implements IClient {
       }
     });
     
-    console.info("[Sokuji] [PalabraAIClient] Custom audio setup complete");
+    console.info("[GM MeetMind] [PalabraAIClient] Custom audio setup complete");
   }
 
   private async startTranslation(): Promise<void> {
@@ -587,11 +587,11 @@ export class PalabraAIClient implements IClient {
     });
     
     await this.room.localParticipant.publishData(message, { reliable: true });
-    console.info("[Sokuji] [PalabraAIClient] Translation started with config:", translationConfig);
+    console.info("[GM MeetMind] [PalabraAIClient] Translation started with config:", translationConfig);
   }
 
   private handleTrackSubscribed(track: RemoteTrack, publication: TrackPublication, participant: RemoteParticipant): void {
-    console.info("[Sokuji] [PalabraAIClient] Track subscribed:", track.kind);
+    console.info("[GM MeetMind] [PalabraAIClient] Track subscribed:", track.kind);
     // Verbose logs (publication, participant) removed for cleaner output
     
     // Notify about track subscription event
@@ -666,7 +666,7 @@ export class PalabraAIClient implements IClient {
             }
           };
         } catch (error) {
-          console.error("[Sokuji] [PalabraAIClient] Failed to set up audio worklet:", error);
+          console.error("[GM MeetMind] [PalabraAIClient] Failed to set up audio worklet:", error);
         }
       };
 
@@ -719,7 +719,7 @@ export class PalabraAIClient implements IClient {
           });
       }
     } catch (error: any) {
-      console.error("[Sokuji] [PalabraAIClient] Error parsing data:", error);
+      console.error("[GM MeetMind] [PalabraAIClient] Error parsing data:", error);
       // Notify about parsing error
       this.eventHandlers.onRealtimeEvent?.({
         source: 'server',
@@ -1004,7 +1004,7 @@ export class PalabraAIClient implements IClient {
       }
     });
 
-    console.error("[Sokuji] [PalabraAIClient] Received error:", errorData);
+    console.error("[GM MeetMind] [PalabraAIClient] Received error:", errorData);
 
     // Create error ConversationItem for display in UI
     const errorType = errorData.type || errorData.code || 'error';
@@ -1028,7 +1028,7 @@ export class PalabraAIClient implements IClient {
   }
 
   private handleRoomConnected(): void {
-    console.info("[Sokuji] [PalabraAIClient] Room connected");
+    console.info("[GM MeetMind] [PalabraAIClient] Room connected");
     
     // Notify about room connection event
     this.eventHandlers.onRealtimeEvent?.({
@@ -1045,7 +1045,7 @@ export class PalabraAIClient implements IClient {
   }
 
   private handleRoomDisconnected(): void {
-    console.info("[Sokuji] [PalabraAIClient] Room disconnected");
+    console.info("[GM MeetMind] [PalabraAIClient] Room disconnected");
     
     // Notify about room disconnection event
     this.eventHandlers.onRealtimeEvent?.({
@@ -1093,7 +1093,7 @@ export class PalabraAIClient implements IClient {
       });
 
       if (!response.ok) {
-        console.warn("[Sokuji] [PalabraAIClient] Failed to get sessions:", response.statusText);
+        console.warn("[GM MeetMind] [PalabraAIClient] Failed to get sessions:", response.statusText);
         return [];
       }
 
@@ -1116,15 +1116,15 @@ export class PalabraAIClient implements IClient {
         // This handles {"data": {"sessions": [...]}} and {"data": {"sessions": null}}
         sessions = data.data.sessions;
       } else {
-        console.warn("[Sokuji] [PalabraAIClient] Unexpected response structure:", data);
+        console.warn("[GM MeetMind] [PalabraAIClient] Unexpected response structure:", data);
         return [];
       }
       
-      console.info("[Sokuji] [PalabraAIClient] Retrieved existing sessions:", (sessions || []).length);
+      console.info("[GM MeetMind] [PalabraAIClient] Retrieved existing sessions:", (sessions || []).length);
       return sessions || [];
       
     } catch (error) {
-      console.error("[Sokuji] [PalabraAIClient] Error getting sessions:", error);
+      console.error("[GM MeetMind] [PalabraAIClient] Error getting sessions:", error);
       return [];
     }
   }
@@ -1142,12 +1142,12 @@ export class PalabraAIClient implements IClient {
       });
 
       if (response.ok || response.status === 204) {
-        console.info("[Sokuji] [PalabraAIClient] Session deleted successfully:", sessionId);
+        console.info("[GM MeetMind] [PalabraAIClient] Session deleted successfully:", sessionId);
       } else {
-        console.warn("[Sokuji] [PalabraAIClient] Failed to delete session:", sessionId, response.statusText);
+        console.warn("[GM MeetMind] [PalabraAIClient] Failed to delete session:", sessionId, response.statusText);
       }
     } catch (error) {
-      console.error("[Sokuji] [PalabraAIClient] Error deleting session:", sessionId, error);
+      console.error("[GM MeetMind] [PalabraAIClient] Error deleting session:", sessionId, error);
     }
   }
 
@@ -1159,27 +1159,27 @@ export class PalabraAIClient implements IClient {
       const existingSessions = await this.getUserSessions();
       
       if (!existingSessions || !Array.isArray(existingSessions) || existingSessions.length === 0) {
-        console.info("[Sokuji] [PalabraAIClient] No existing sessions to clean up");
+        console.info("[GM MeetMind] [PalabraAIClient] No existing sessions to clean up");
         return;
       }
 
-      console.info("[Sokuji] [PalabraAIClient] Cleaning up existing sessions:", existingSessions.length);
+      console.info("[GM MeetMind] [PalabraAIClient] Cleaning up existing sessions:", existingSessions.length);
       
       // Delete all existing sessions
       const deletePromises = existingSessions.map(session => {
         if (session && session.id) {
           return this.deleteSession(session.id);
         } else {
-          console.warn("[Sokuji] [PalabraAIClient] Invalid session object:", session);
+          console.warn("[GM MeetMind] [PalabraAIClient] Invalid session object:", session);
           return Promise.resolve();
         }
       });
       
       await Promise.all(deletePromises);
-      console.info("[Sokuji] [PalabraAIClient] Cleanup completed");
+      console.info("[GM MeetMind] [PalabraAIClient] Cleanup completed");
       
     } catch (error) {
-      console.error("[Sokuji] [PalabraAIClient] Error during cleanup:", error);
+      console.error("[GM MeetMind] [PalabraAIClient] Error during cleanup:", error);
       // Don't throw here, allow connection to continue
     }
   }

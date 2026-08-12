@@ -712,7 +712,7 @@ Replace with:
 ```typescript
           const participantSessionConfig = createParticipantSessionConfig();
           if (!participantSessionConfig) {
-            console.info('[Sokuji] [MainPanel] Participant skipped — no suitable models');
+            console.info('[GM MeetMind] [MainPanel] Participant skipped — no suitable models');
             systemAudioClientRef.current = null;
           } else {
             await participantClient.connect(participantSessionConfig);
@@ -721,13 +721,13 @@ Replace with:
 And add the corresponding closing brace. Find the end of the participant recording section (around line 1212):
 
 ```typescript
-          console.info(`[Sokuji] [MainPanel] Participant audio recording started (${captureMode})`);
+          console.info(`[GM MeetMind] [MainPanel] Participant audio recording started (${captureMode})`);
 ```
 
 Add a closing `}` after this line to close the `else` block:
 
 ```typescript
-          console.info(`[Sokuji] [MainPanel] Participant audio recording started (${captureMode})`);
+          console.info(`[GM MeetMind] [MainPanel] Participant audio recording started (${captureMode})`);
           }
 ```
 

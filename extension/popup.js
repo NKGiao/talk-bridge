@@ -26,7 +26,7 @@ function initializePostHog() {
 
   // Skip initialization if no key configured (fork projects without PostHog)
   if (!isAnalyticsEnabled()) {
-    console.debug('[Sokuji] [Popup] PostHog analytics disabled (POSTHOG_KEY not set)');
+    console.debug('[GM MeetMind] [Popup] PostHog analytics disabled (POSTHOG_KEY not set)');
     return;
   }
 
@@ -51,12 +51,12 @@ function initializePostHog() {
     // In development, opt out by default
     if (isDevelopment()) {
       posthogInstance.optOut();
-      console.debug('[Sokuji] [Popup] PostHog initialized in development mode - capturing is opt-out by default');
+      console.debug('[GM MeetMind] [Popup] PostHog initialized in development mode - capturing is opt-out by default');
     }
     
-    console.debug('[Sokuji] [Popup] PostHog initialized');
+    console.debug('[GM MeetMind] [Popup] PostHog initialized');
   } catch (error) {
-    console.error('[Sokuji] [Popup] Error initializing PostHog:', error);
+    console.error('[GM MeetMind] [Popup] Error initializing PostHog:', error);
   }
 }
 
@@ -72,10 +72,10 @@ function trackEvent(eventName, properties = {}) {
       // Sanitize properties by removing sensitive data
       const sanitizedProperties = sanitizeProperties(properties);
       posthogInstance.capture(eventName, sanitizedProperties);
-      console.debug('[Sokuji] [Popup] Event tracked:', eventName, sanitizedProperties);
+      console.debug('[GM MeetMind] [Popup] Event tracked:', eventName, sanitizedProperties);
     }
   } catch (error) {
-    console.error('[Sokuji] [Popup] Error tracking event:', error);
+    console.error('[GM MeetMind] [Popup] Error tracking event:', error);
   }
 }
 
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize popup
     await initializePopup();
   } catch (error) {
-    console.error('[Sokuji] [Popup] Error initializing popup:', error);
+    console.error('[GM MeetMind] [Popup] Error initializing popup:', error);
     showErrorState();
   }
 });
@@ -434,7 +434,7 @@ function setupEventListeners(tabId, isSupported, currentHostname) {
         // Close the popup
         window.close();
       } catch (error) {
-        console.error('[Sokuji] [Popup] Error opening side panel:', error);
+        console.error('[GM MeetMind] [Popup] Error opening side panel:', error);
         
         // Track side panel open error
         trackEvent('sidepanel_open_error', {
@@ -458,7 +458,7 @@ function setupEventListeners(tabId, isSupported, currentHostname) {
           
           window.close();
         } catch (fallbackError) {
-          console.error('[Sokuji] [Popup] Fallback failed:', fallbackError);
+          console.error('[GM MeetMind] [Popup] Fallback failed:', fallbackError);
           
           // Track fallback error
           trackEvent('sidepanel_open_error', {
