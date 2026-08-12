@@ -242,7 +242,7 @@ Replace the existing `onclose` callback (lines 409-430) with:
 
 ```typescript
           onclose: (event: CloseEvent) => {
-            console.info('[Sokuji] [GeminiClient] Session closed', event);
+            console.info('[GM MeetMind] [GeminiClient] Session closed', event);
             this.session = null;
 
             // If already reconnecting (triggered by goAway), skip — reconnect() handles it
@@ -339,7 +339,7 @@ After the `disconnect()` method (around line 829), add:
         this.eventHandlers.onReconnected?.();
         return;
       } catch (error) {
-        console.warn(`[Sokuji] [GeminiClient] Reconnection attempt ${attempt}/${maxRetries} failed`, error);
+        console.warn(`[GM MeetMind] [GeminiClient] Reconnection attempt ${attempt}/${maxRetries} failed`, error);
       }
     }
 
@@ -388,10 +388,10 @@ After the `reconnect()` method, add:
    */
   simulateDisconnectForTesting(): void {
     if (!this.session || !this.savedResumptionHandle) {
-      console.warn('[Sokuji] [GeminiClient] Cannot simulate disconnect: no session or no resumption handle');
+      console.warn('[GM MeetMind] [GeminiClient] Cannot simulate disconnect: no session or no resumption handle');
       return;
     }
-    console.info('[Sokuji] [GeminiClient] DEV: Simulating disconnect to test reconnection');
+    console.info('[GM MeetMind] [GeminiClient] DEV: Simulating disconnect to test reconnection');
     this.session.close();  // Forces onclose → triggers reconnect path
   }
 ```
@@ -445,14 +445,14 @@ In the `useMemo` block that creates the event handlers (the block containing `on
 
 ```typescript
       onReconnecting: () => {
-        console.info('[Sokuji] [MainPanel] Session reconnecting...');
+        console.info('[GM MeetMind] [MainPanel] Session reconnecting...');
         setIsReconnecting(true);
         addLog('Session reconnecting...', 'warning');
         // Do NOT set isSessionActive to false
         // Do NOT clean up audio, participant clients, etc.
       },
       onReconnected: () => {
-        console.info('[Sokuji] [MainPanel] Session reconnected successfully');
+        console.info('[GM MeetMind] [MainPanel] Session reconnected successfully');
         setIsReconnecting(false);
         addLog('Session reconnected', 'success');
       },
@@ -464,7 +464,7 @@ At the beginning of the existing `onClose` handler (line 641), add:
 
 ```typescript
       onClose: async (event: any) => {
-        console.info('[Sokuji] [MainPanel] Connection closed, cleaning up session', event);
+        console.info('[GM MeetMind] [MainPanel] Connection closed, cleaning up session', event);
         setIsReconnecting(false);  // Ensure clean state
         // ...rest of existing onClose logic unchanged...
 ```

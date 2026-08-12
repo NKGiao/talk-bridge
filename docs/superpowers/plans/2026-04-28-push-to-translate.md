@@ -407,7 +407,7 @@ useEffect(() => {
     );
     
     if (isRealVoicePassthroughEnabled) {
-      console.debug('[Sokuji] [MainPanel] Updated passthrough settings: enabled=', isRealVoicePassthroughEnabled, 'volume=', realVoicePassthroughVolume);
+      console.debug('[GM MeetMind] [MainPanel] Updated passthrough settings: enabled=', isRealVoicePassthroughEnabled, 'volume=', realVoicePassthroughVolume);
     }
   }
 }, [isRealVoicePassthroughEnabled, realVoicePassthroughVolume, selectedInputDevice, selectedMonitorDevice, isMonitorDeviceOn]);
@@ -438,7 +438,7 @@ useEffect(() => {
   audioService.setupPassthrough(enabled, volume);
 
   if (enabled) {
-    console.debug('[Sokuji] [MainPanel] Updated passthrough settings: enabled=', enabled, 'volume=', volume, 'mode=', currentTurnDetectionMode);
+    console.debug('[GM MeetMind] [MainPanel] Updated passthrough settings: enabled=', enabled, 'volume=', volume, 'mode=', currentTurnDetectionMode);
   }
 }, [
   currentTurnDetectionMode,
@@ -717,7 +717,7 @@ if (!usesNativeCapture && !turnDetectionDisabled && isInputDeviceOn && audioServ
   await audioServiceRef.current.startRecording(selectedInputDevice?.deviceId, (data) => {
     if (clientRef.current) {
       if (audioCallbackCount % 100 === 0) {
-        console.debug(`[Sokuji] [MainPanel] Sending audio to client: chunk ${audioCallbackCount}, PCM length: ${data.mono.length}`);
+        console.debug(`[GM MeetMind] [MainPanel] Sending audio to client: chunk ${audioCallbackCount}, PCM length: ${data.mono.length}`);
       }
       audioCallbackCount++;
       clientRef.current.appendInputAudio(data.mono);
@@ -768,7 +768,7 @@ if (!usesNativeCapture && isInputDeviceOn && audioServiceRef.current) {
     await audioServiceRef.current.startRecording(selectedInputDevice?.deviceId, (data) => {
       if (clientRef.current) {
         if (audioCallbackCount % 100 === 0) {
-          console.debug(`[Sokuji] [MainPanel] Sending audio to client: chunk ${audioCallbackCount}, PCM length: ${data.mono.length}`);
+          console.debug(`[GM MeetMind] [MainPanel] Sending audio to client: chunk ${audioCallbackCount}, PCM length: ${data.mono.length}`);
         }
         audioCallbackCount++;
         clientRef.current.appendInputAudio(data.mono);
@@ -784,7 +784,7 @@ if (!usesNativeCapture && isInputDeviceOn && audioServiceRef.current) {
         return;  // IDLE: route to passthrough only, don't send to AI
       }
       if (p2tCallbackCount % 100 === 0) {
-        console.debug(`[Sokuji] [MainPanel] P2T: Sending audio to client: chunk ${p2tCallbackCount}, PCM length: ${data.mono.length}`);
+        console.debug(`[GM MeetMind] [MainPanel] P2T: Sending audio to client: chunk ${p2tCallbackCount}, PCM length: ${data.mono.length}`);
       }
       p2tCallbackCount++;
       clientRef.current.appendInputAudio(data.mono);
@@ -804,13 +804,13 @@ Then change the conditional recorder start (around line 2173–2188) from:
 
 ```ts
 if (!turnDetectionDisabled) {
-  console.info('[Sokuji] [MainPanel] Input device turned on - starting recording in automatic mode');
+  console.info('[GM MeetMind] [MainPanel] Input device turned on - starting recording in automatic mode');
   if (!recorder.isRecording()) {
     let autoAudioCallbackCount = 0;
     await audioService.startRecording(selectedInputDevice?.deviceId, (data) => {
       if (client) {
         if (autoAudioCallbackCount % 100 === 0) {
-          console.debug(`[Sokuji] [MainPanel] Auto: Sending audio to client: chunk ${autoAudioCallbackCount}, PCM length: ${data.mono.length}`);
+          console.debug(`[GM MeetMind] [MainPanel] Auto: Sending audio to client: chunk ${autoAudioCallbackCount}, PCM length: ${data.mono.length}`);
         }
         autoAudioCallbackCount++;
         client.appendInputAudio(data.mono);
@@ -826,13 +826,13 @@ to:
 
 ```ts
 if (!turnDetectionDisabled) {
-  console.info('[Sokuji] [MainPanel] Input device turned on - starting recording in automatic mode');
+  console.info('[GM MeetMind] [MainPanel] Input device turned on - starting recording in automatic mode');
   if (!recorder.isRecording()) {
     let autoAudioCallbackCount = 0;
     await audioService.startRecording(selectedInputDevice?.deviceId, (data) => {
       if (client) {
         if (autoAudioCallbackCount % 100 === 0) {
-          console.debug(`[Sokuji] [MainPanel] Auto: Sending audio to client: chunk ${autoAudioCallbackCount}, PCM length: ${data.mono.length}`);
+          console.debug(`[GM MeetMind] [MainPanel] Auto: Sending audio to client: chunk ${autoAudioCallbackCount}, PCM length: ${data.mono.length}`);
         }
         autoAudioCallbackCount++;
         client.appendInputAudio(data.mono);
@@ -840,14 +840,14 @@ if (!turnDetectionDisabled) {
     });
   }
 } else if (isPushToTranslateMode) {
-  console.info('[Sokuji] [MainPanel] Input device turned on - starting recording in Push-to-translate mode');
+  console.info('[GM MeetMind] [MainPanel] Input device turned on - starting recording in Push-to-translate mode');
   if (!recorder.isRecording()) {
     let p2tCallbackCount = 0;
     await audioService.startRecording(selectedInputDevice?.deviceId, (data) => {
       if (!client) return;
       if (data.isPassthrough) return;
       if (p2tCallbackCount % 100 === 0) {
-        console.debug(`[Sokuji] [MainPanel] P2T: Sending audio to client: chunk ${p2tCallbackCount}, PCM length: ${data.mono.length}`);
+        console.debug(`[GM MeetMind] [MainPanel] P2T: Sending audio to client: chunk ${p2tCallbackCount}, PCM length: ${data.mono.length}`);
       }
       p2tCallbackCount++;
       client.appendInputAudio(data.mono);
@@ -895,7 +895,7 @@ try {
   const recorder = audioService.getRecorder();
   if (recorder.isRecording()) {
     // If somehow we're already recording, pause first
-    console.warn('[Sokuji] [MainPanel] ModernAudioRecorder was already recording, pausing first');
+    console.warn('[GM MeetMind] [MainPanel] ModernAudioRecorder was already recording, pausing first');
     await audioService.pauseRecording();
   }
 
@@ -906,7 +906,7 @@ try {
     if (client) {
       // Debug logging for push-to-talk (every 50 chunks)
       if (pttAudioCallbackCount % 50 === 0) {
-        console.debug(`[Sokuji] [MainPanel] PTT: Sending audio to client: chunk ${pttAudioCallbackCount}, PCM length: ${data.mono.length}`);
+        console.debug(`[GM MeetMind] [MainPanel] PTT: Sending audio to client: chunk ${pttAudioCallbackCount}, PCM length: ${data.mono.length}`);
       }
       pttAudioCallbackCount++;
 
@@ -919,7 +919,7 @@ try {
     }
   });
 } catch (error) {
-  console.error('[Sokuji] [MainPanel] Error starting recording:', error);
+  console.error('[GM MeetMind] [MainPanel] Error starting recording:', error);
   setIsRecording(false);
 }
 ```
@@ -947,7 +947,7 @@ try {
   const recorder = audioService.getRecorder();
   if (recorder.isRecording()) {
     // If somehow we're already recording, pause first
-    console.warn('[Sokuji] [MainPanel] ModernAudioRecorder was already recording, pausing first');
+    console.warn('[GM MeetMind] [MainPanel] ModernAudioRecorder was already recording, pausing first');
     await audioService.pauseRecording();
   }
 
@@ -958,7 +958,7 @@ try {
     if (client) {
       // Debug logging for push-to-talk (every 50 chunks)
       if (pttAudioCallbackCount % 50 === 0) {
-        console.debug(`[Sokuji] [MainPanel] PTT: Sending audio to client: chunk ${pttAudioCallbackCount}, PCM length: ${data.mono.length}`);
+        console.debug(`[GM MeetMind] [MainPanel] PTT: Sending audio to client: chunk ${pttAudioCallbackCount}, PCM length: ${data.mono.length}`);
       }
       pttAudioCallbackCount++;
 
@@ -971,7 +971,7 @@ try {
     }
   });
 } catch (error) {
-  console.error('[Sokuji] [MainPanel] Error starting recording:', error);
+  console.error('[GM MeetMind] [MainPanel] Error starting recording:', error);
   setIsRecording(false);
 }
 ```
@@ -1006,7 +1006,7 @@ try {
         // New buffer each iteration — worker postMessage transfers (detaches) the ArrayBuffer
         client.appendInputAudio(new Int16Array(silenceFrameSize));
       }
-      console.debug(`[Sokuji] [MainPanel] PTT: Sent ${silenceFrames * 100}ms silence frames for VAD end detection`);
+      console.debug(`[GM MeetMind] [MainPanel] PTT: Sent ${silenceFrames * 100}ms silence frames for VAD end detection`);
     }
 
     // Stop recording
@@ -1026,18 +1026,18 @@ try {
         // No meaningful speech detected — reset speaking state without sending
         // activityEnd so Gemini doesn't generate a response for silence
         client.cancelPttTurn?.();
-        console.debug(`[Sokuji] [MainPanel] PTT: Gemini turn cancelled - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
+        console.debug(`[GM MeetMind] [MainPanel] PTT: Gemini turn cancelled - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
       }
     } else if (client && provider !== Provider.VOLCENGINE_AST2 && pttVoiceChunkCountRef.current >= MIN_VOICE_CHUNKS) {
       // Model drift prevention is handled by the silent anchor mechanism (useEffect)
       client.createResponse();
     } else if (client && provider !== Provider.VOLCENGINE_AST2) {
-      console.debug(`[Sokuji] [MainPanel] PTT: Skipping response - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
+      console.debug(`[GM MeetMind] [MainPanel] PTT: Skipping response - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
     }
   }
 } catch (error) {
   // If there's an error during pause (e.g., already paused), log it but don't crash
-  console.error('[Sokuji] [MainPanel] Error stopping recording:', error);
+  console.error('[GM MeetMind] [MainPanel] Error stopping recording:', error);
 
   // Reset the recording state to ensure UI is consistent
   setIsRecording(false);
@@ -1063,7 +1063,7 @@ try {
         // New buffer each iteration — worker postMessage transfers (detaches) the ArrayBuffer
         client.appendInputAudio(new Int16Array(silenceFrameSize));
       }
-      console.debug(`[Sokuji] [MainPanel] PTT: Sent ${silenceFrames * 100}ms silence frames for VAD end detection`);
+      console.debug(`[GM MeetMind] [MainPanel] PTT: Sent ${silenceFrames * 100}ms silence frames for VAD end detection`);
     }
 
     // Stop recording — but only for pure PTT. Push-to-translate keeps the recorder
@@ -1087,18 +1087,18 @@ try {
         // No meaningful speech detected — reset speaking state without sending
         // activityEnd so Gemini doesn't generate a response for silence
         client.cancelPttTurn?.();
-        console.debug(`[Sokuji] [MainPanel] PTT: Gemini turn cancelled - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
+        console.debug(`[GM MeetMind] [MainPanel] PTT: Gemini turn cancelled - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
       }
     } else if (client && provider !== Provider.VOLCENGINE_AST2 && pttVoiceChunkCountRef.current >= MIN_VOICE_CHUNKS) {
       // Model drift prevention is handled by the silent anchor mechanism (useEffect)
       client.createResponse();
     } else if (client && provider !== Provider.VOLCENGINE_AST2) {
-      console.debug(`[Sokuji] [MainPanel] PTT: Skipping response - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
+      console.debug(`[GM MeetMind] [MainPanel] PTT: Skipping response - only ${pttVoiceChunkCountRef.current} voice chunks detected (minimum: ${MIN_VOICE_CHUNKS})`);
     }
   }
 } catch (error) {
   // If there's an error during pause (e.g., already paused), log it but don't crash
-  console.error('[Sokuji] [MainPanel] Error stopping recording:', error);
+  console.error('[GM MeetMind] [MainPanel] Error stopping recording:', error);
 
   // Reset the recording state to ensure UI is consistent
   setIsRecording(false);

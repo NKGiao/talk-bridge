@@ -8,7 +8,7 @@ published: false
 
 ## はじめに
 
-このシリーズでは、リアルタイム AI 翻訳アプリ **[Sokuji](https://github.com/kizuna-ai-lab/sokuji)** の開発を通じて、ブラウザ上で完全オフラインの音声→音声（Speech-to-Speech）翻訳パイプラインを構築しています。
+このシリーズでは、リアルタイム AI 翻訳アプリ **[GM MeetMind](https://github.com/kizuna-ai-lab/sokuji)** の開発を通じて、ブラウザ上で完全オフラインの音声→音声（Speech-to-Speech）翻訳パイプラインを構築しています。
 
 [前回の記事](https://zenn.dev/shinonome_tk/articles/7b27eac0eb7ab6)では、sherpa-onnx WASM を使ってブラウザ上で完全ローカルの音声認識（ASR）を実現しました。今回は、認識されたテキストを**ブラウザ内でリアルタイム翻訳する仕組み**を解説します。クラウドAPIを一切使わずに、Transformers.js と ONNX モデルを組み合わせて、ブラウザだけで機械翻訳を動かします。
 

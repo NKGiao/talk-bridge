@@ -658,10 +658,10 @@ static async validateApiKeyAndFetchModels(apiKey: string, apiHost?: string): Pro
     return { validation: error, models: [] };
   }
 
-  console.info("[Sokuji] [OpenAIClient] Available models:", models);
+  console.info("[GM MeetMind] [OpenAIClient] Available models:", models);
 
   const hasRealtimeModel = this.checkRealtimeModelAvailability(models);
-  console.info("[Sokuji] [OpenAIClient] Has realtime model:", hasRealtimeModel);
+  console.info("[GM MeetMind] [OpenAIClient] Has realtime model:", hasRealtimeModel);
 
   const filteredModels = this.filterRelevantModels(models);
 
@@ -780,7 +780,7 @@ static async mintTranslationClientSecret(
   // alongside other session metadata. Defensive: log the full response on
   // first failure so we can verify the shape against real API responses.
   if (!data.client_secret) {
-    console.error('[Sokuji] [EphemeralTokenService] Unexpected client_secret response shape:', data);
+    console.error('[GM MeetMind] [EphemeralTokenService] Unexpected client_secret response shape:', data);
     throw new Error('Translation client_secret missing from response');
   }
   return typeof data.client_secret === 'string'

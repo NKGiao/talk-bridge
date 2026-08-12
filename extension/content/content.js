@@ -18,11 +18,11 @@ function getExtensionURL(path) {
     }
     // Fallback for other browsers or testing environments
     else {
-      console.warn('[Sokuji] [Content] Browser extension API not available, using relative path');
+      console.warn('[GM MeetMind] [Content] Browser extension API not available, using relative path');
       url = path;
     }
   } catch (error) {
-    console.error('[Sokuji] [Content] Error getting extension URL:', error);
+    console.error('[GM MeetMind] [Content] Error getting extension URL:', error);
     url = path;
   }
   return url;
@@ -51,7 +51,7 @@ function injectDeviceEmulatorScript() {
     document.appendChild(script);
   }
   
-  console.info('[Sokuji] [Content] Device emulator script injected into page');
+  console.info('[GM MeetMind] [Content] Device emulator script injected into page');
 }
 
 // Inject the virtual microphone script as early as possible
@@ -77,7 +77,7 @@ function injectVirtualMicrophoneScript() {
     document.appendChild(script);
   }
   
-  console.info('[Sokuji] [Content] Virtual microphone script injected into page');
+  console.info('[GM MeetMind] [Content] Virtual microphone script injected into page');
 }
 
 // Inject site plugins script (includes plugin initialization)
@@ -110,7 +110,7 @@ function injectSitePluginsScript() {
         const encodedValue = btoa(unescape(encodeURIComponent(value)));
         i18nParams.set(key, encodedValue);
       } catch (error) {
-        console.warn(`[Sokuji] [Content] Failed to encode i18n message for ${key}:`, error);
+        console.warn(`[GM MeetMind] [Content] Failed to encode i18n message for ${key}:`, error);
         // Fallback to direct encoding if Base64 fails
         i18nParams.set(key, encodeURIComponent(value));
       }
@@ -136,7 +136,7 @@ function injectSitePluginsScript() {
     document.appendChild(script);
   }
   
-  console.info('[Sokuji] [Content] Site plugins script injected into page with i18n parameters (Base64 encoded)');
+  console.info('[GM MeetMind] [Content] Site plugins script injected into page with i18n parameters (Base64 encoded)');
 }
 
 // Function to inject permission iframe
@@ -168,11 +168,11 @@ function injectPermissionIframe() {
   } else if (document.documentElement) {
     document.documentElement.appendChild(iframe);
   } else {
-    console.error('[Sokuji] [Content] Cannot inject permission iframe - no suitable parent element found');
+    console.error('[GM MeetMind] [Content] Cannot inject permission iframe - no suitable parent element found');
     return; // Exit the function if we can't inject the iframe
   }
   
-  console.info('[Sokuji] [Content] Permission iframe injected into page');
+  console.info('[GM MeetMind] [Content] Permission iframe injected into page');
 }
 
 // Run script injections immediately (before DOMContentLoaded)
@@ -194,7 +194,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Handle new PCM_DATA message
   if (message.type === 'PCM_DATA') {
-    console.debug(`[Sokuji] [Content] Received PCM data from side panel script: chunk ${message.chunkIndex + 1}/${message.totalChunks}`);
+    console.debug(`[GM MeetMind] [Content] Received PCM data from side panel script: chunk ${message.chunkIndex + 1}/${message.totalChunks}`);
     
     // Forward PCM data to page's virtual microphone with same format
     window.postMessage(message, '*');
@@ -210,7 +210,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Content script loaded
-console.info('[Sokuji] [Content] Universal content script loaded and ready for audio bridging');
+console.info('[GM MeetMind] [Content] Universal content script loaded and ready for audio bridging');
 
 // Expose API for debugging in content script context
 window.sokujiContentScript = {

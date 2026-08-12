@@ -223,7 +223,7 @@ export class GeminiClient implements IClient {
    * Handle API key validation errors
    */
   private static handleValidationError(error: any): ApiKeyValidationResult {
-    console.error("[Sokuji] [GeminiClient] API key validation error:", error);
+    console.error("[GM MeetMind] [GeminiClient] API key validation error:", error);
     return {
       valid: false,
       message: error.message || i18n.t('settings.errorValidatingApiKey'),
@@ -235,7 +235,7 @@ export class GeminiClient implements IClient {
    * Handle model fetching errors
    */
   private static handleModelFetchError(error: any): never {
-    console.error("[Sokuji] [GeminiClient] Error fetching models:", error);
+    console.error("[GM MeetMind] [GeminiClient] Error fetching models:", error);
     throw error;
   }
 
@@ -271,13 +271,13 @@ export class GeminiClient implements IClient {
       // Make request to Gemini API models endpoint
       const availableModels = await this.fetchModelsFromAPI(apiKey);
 
-      console.info("[Sokuji] [GeminiClient] Validation response: success");
+      console.info("[GM MeetMind] [GeminiClient] Validation response: success");
 
       // Check for realtime models availability
       const hasRealtimeModel = this.checkRealtimeModelAvailability(availableModels);
 
-      console.info("[Sokuji] [GeminiClient] Available models:", availableModels);
-      console.info("[Sokuji] [GeminiClient] Has realtime model:", hasRealtimeModel);
+      console.info("[GM MeetMind] [GeminiClient] Available models:", availableModels);
+      console.info("[GM MeetMind] [GeminiClient] Has realtime model:", hasRealtimeModel);
 
       // Filter relevant models
       const filteredModels = this.filterRelevantModels(availableModels);
@@ -331,11 +331,11 @@ export class GeminiClient implements IClient {
       }
     });
 
-    console.info(`[Sokuji] [GeminiClient] Found ${relevantModels.length} realtime-capable models from API`);
+    console.info(`[GM MeetMind] [GeminiClient] Found ${relevantModels.length} realtime-capable models from API`);
 
     // If no models found from API, return fallback models
     if (relevantModels.length === 0) {
-      console.warn("[Sokuji] [GeminiClient] No suitable models found from API, using fallback models");
+      console.warn("[GM MeetMind] [GeminiClient] No suitable models found from API, using fallback models");
       return this.getFallbackModels();
     }
 
@@ -403,7 +403,7 @@ export class GeminiClient implements IClient {
       }
     }
 
-    console.info('[Sokuji] [GeminiClient] realtimeInputConfig:', JSON.stringify(realtimeInputConfig));
+    console.info('[GM MeetMind] [GeminiClient] realtimeInputConfig:', JSON.stringify(realtimeInputConfig));
 
     // A Live Translate session is identified by carrying a translationConfig —
     // the client keys off the config's shape rather than matching model names,
@@ -474,7 +474,7 @@ export class GeminiClient implements IClient {
         callbacks: {
           onopen: () => {
             if (token !== this.connectionToken) return;  // stale callback
-            console.info('[Sokuji] [GeminiClient] Session opened');
+            console.info('[GM MeetMind] [GeminiClient] Session opened');
             this.isConnectedState = true;
             this.eventHandlers.onRealtimeEvent?.({
               source: 'client',
@@ -501,7 +501,7 @@ export class GeminiClient implements IClient {
           },
           onerror: (error: ErrorEvent) => {
             if (token !== this.connectionToken) return;  // stale callback
-            console.error('[Sokuji] [GeminiClient] Session error:', error);
+            console.error('[GM MeetMind] [GeminiClient] Session error:', error);
             this.eventHandlers.onRealtimeEvent?.({
               source: 'client',
               event: {
@@ -527,10 +527,10 @@ export class GeminiClient implements IClient {
               // trigger reconnect(). The spurious reconnect bug this guards against
               // would otherwise tear down a perfectly healthy session seconds after
               // a successful resume.
-              console.debug('[Sokuji] [GeminiClient] Ignoring stale onclose from token', token);
+              console.debug('[GM MeetMind] [GeminiClient] Ignoring stale onclose from token', token);
               return;
             }
-            console.info('[Sokuji] [GeminiClient] Session closed', event);
+            console.info('[GM MeetMind] [GeminiClient] Session closed', event);
             this.session = null;
 
             // If already reconnecting (triggered by goAway), skip — reconnect() handles it
@@ -585,7 +585,7 @@ export class GeminiClient implements IClient {
   }
 
   private async handleMessage(message: LiveServerMessage): Promise<void> {
-    console.debug('[Sokuji] [GeminiClient] Message received:', message);
+    console.debug('[GM MeetMind] [GeminiClient] Message received:', message);
     
     // Emit specific realtime events based on message content
     if (message.setupComplete) {
@@ -1150,7 +1150,7 @@ export class GeminiClient implements IClient {
     //   new sessionResumptionUpdate). Treat it as a permanent disconnect so the
     //   user knows the session ended instead of getting garbled translations.
     if (!this.savedResumptionHandle && this.hasLocalSessionState()) {
-      console.warn('[Sokuji] [GeminiClient] Cannot fresh-reconnect: local state present, no handle. Treating as disconnect.');
+      console.warn('[GM MeetMind] [GeminiClient] Cannot fresh-reconnect: local state present, no handle. Treating as disconnect.');
       this.firePermanentDisconnect('lost handle with active local state');
       return;
     }
@@ -1205,7 +1205,7 @@ export class GeminiClient implements IClient {
             }
           }
         });
-        console.warn(`[Sokuji] [GeminiClient] Reconnection attempt ${attempt}/${maxRetries} failed`, error);
+        console.warn(`[GM MeetMind] [GeminiClient] Reconnection attempt ${attempt}/${maxRetries} failed`, error);
       }
     }
 

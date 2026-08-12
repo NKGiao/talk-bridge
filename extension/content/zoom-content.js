@@ -17,11 +17,11 @@ function getExtensionURL(path) {
     }
     // Fallback for other browsers or testing environments
     else {
-      console.warn('[Sokuji] [Zoom] Browser extension API not available, using relative path');
+      console.warn('[GM MeetMind] [Zoom] Browser extension API not available, using relative path');
       url = path;
     }
   } catch (error) {
-    console.error('[Sokuji] [Zoom] Error getting extension URL:', error);
+    console.error('[GM MeetMind] [Zoom] Error getting extension URL:', error);
     url = path;
   }
   return url;
@@ -30,11 +30,11 @@ function getExtensionURL(path) {
 // Determine if we're in the webclient iframe
 const isWebclientIframe = window !== window.top && window.self.frameElement && window.self.frameElement.id === 'webclient';
 
-console.info(`[Sokuji] [Zoom] Initializing: isWebclientIframe=${isWebclientIframe}`);
+console.info(`[GM MeetMind] [Zoom] Initializing: isWebclientIframe=${isWebclientIframe}`);
 
 // Only proceed if we're in the webclient iframe
 if (!isWebclientIframe) {
-  console.info('[Sokuji] [Zoom] Not in webclient iframe, exiting');
+  console.info('[GM MeetMind] [Zoom] Not in webclient iframe, exiting');
   // Exit early if not in webclient iframe
 } else {
   // Inject the device emulator script first
@@ -56,7 +56,7 @@ if (!isWebclientIframe) {
     } else {
       document.appendChild(script);
     }
-    console.info('[Sokuji] [Zoom] Device emulator script injected into Zoom webclient iframe');
+    console.info('[GM MeetMind] [Zoom] Device emulator script injected into Zoom webclient iframe');
   }
 
   // Inject the virtual microphone script as early as possible
@@ -78,7 +78,7 @@ if (!isWebclientIframe) {
     } else {
       document.appendChild(script);
     }
-    console.info('[Sokuji] [Zoom] Virtual microphone script injected into Zoom webclient iframe');
+    console.info('[GM MeetMind] [Zoom] Virtual microphone script injected into Zoom webclient iframe');
   }
 
   // Function to monitor and auto-select GM MeetMind Virtual Microphone
@@ -123,7 +123,7 @@ if (!isWebclientIframe) {
 
       if (!hasSelectedMicrophone && sokujiMicItem) {
         // No microphone is selected, auto-select our virtual microphone
-        console.info('[Sokuji] [Zoom] No microphone selected, auto-selecting GM MeetMind Virtual Microphone');
+        console.info('[GM MeetMind] [Zoom] No microphone selected, auto-selecting GM MeetMind Virtual Microphone');
         
         // Remove checked class from all microphone items (just in case)
         microphoneItems.forEach(item => {
@@ -147,7 +147,7 @@ if (!isWebclientIframe) {
 
         if (isSokujiSelected && otherMicSelected) {
           // Both our mic and another mic are selected, uncheck ours
-          console.info('[Sokuji] [Zoom] Another microphone is selected, unchecking GM MeetMind Virtual Microphone');
+          console.info('[GM MeetMind] [Zoom] Another microphone is selected, unchecking GM MeetMind Virtual Microphone');
           sokujiMicItem.classList.remove('audio-option-menu__pop-menu--checked');
           sokujiMicItem.setAttribute('aria-selected', 'false');
           sokujiMicItem.setAttribute('aria-label', 
@@ -192,7 +192,7 @@ if (!isWebclientIframe) {
     // Also run a periodic check as backup
     setInterval(checkAndUpdateMicSelection, 2000);
 
-    console.info('[Sokuji] [Zoom] Microphone selection monitor initialized');
+    console.info('[GM MeetMind] [Zoom] Microphone selection monitor initialized');
   }
 
   // Function to inject permission iframe
@@ -224,11 +224,11 @@ if (!isWebclientIframe) {
     } else if (document.documentElement) {
       document.documentElement.appendChild(iframe);
     } else {
-      console.error('[Sokuji] [Zoom] Cannot inject permission iframe - no suitable parent element found');
+      console.error('[GM MeetMind] [Zoom] Cannot inject permission iframe - no suitable parent element found');
       return; // Exit the function if we can't inject the iframe
     }
     
-    console.info('[Sokuji] [Zoom] Permission iframe injected into page');
+    console.info('[GM MeetMind] [Zoom] Permission iframe injected into page');
   }
 
   // Function to show Audio Profile settings notification
@@ -315,7 +315,7 @@ if (!isWebclientIframe) {
         try {
           localStorage.setItem('sokuji-zoom-audio-profile-dismissed', 'true');
         } catch (e) {
-          console.warn('[Sokuji] [Zoom] Could not store dismissal state:', e);
+          console.warn('[GM MeetMind] [Zoom] Could not store dismissal state:', e);
         }
       });
 
@@ -364,11 +364,11 @@ if (!isWebclientIframe) {
     } else if (document.documentElement) {
       document.documentElement.appendChild(notification);
     } else {
-      console.error('[Sokuji] [Zoom] Cannot show audio profile notification - no suitable parent element found');
+      console.error('[GM MeetMind] [Zoom] Cannot show audio profile notification - no suitable parent element found');
       return;
     }
 
-    console.info('[Sokuji] [Zoom] Audio profile notification shown');
+    console.info('[GM MeetMind] [Zoom] Audio profile notification shown');
   }
 
   // Run script injections immediately (before DOMContentLoaded)
@@ -421,7 +421,7 @@ if (!isWebclientIframe) {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Handle new PCM_DATA message
     if (message.type === 'PCM_DATA') {
-      console.debug(`[Sokuji] [Zoom] Received PCM data from side panel script: chunk ${message.chunkIndex + 1}/${message.totalChunks}`);
+      console.debug(`[GM MeetMind] [Zoom] Received PCM data from side panel script: chunk ${message.chunkIndex + 1}/${message.totalChunks}`);
       
       // Post message directly to this window (webclient iframe)
       window.postMessage(message, '*');
@@ -437,7 +437,7 @@ if (!isWebclientIframe) {
   });
 
   // Content script loaded
-  console.info('[Sokuji] [Zoom] Zoom-specific content script loaded and ready for audio bridging');
+  console.info('[GM MeetMind] [Zoom] Zoom-specific content script loaded and ready for audio bridging');
 
   // Expose API for debugging
   window.sokujiZoomContent = {

@@ -560,11 +560,11 @@ noiseSuppressionMode: 'off' as NoiseSuppressionMode,
 
 ```typescript
 setNoiseSuppressionMode: (mode) => {
-  console.info('[Sokuji] [AudioStore] Setting noise suppression mode:', mode);
+  console.info('[GM MeetMind] [AudioStore] Setting noise suppression mode:', mode);
   set({ noiseSuppressionMode: mode });
   const settingsService = ServiceFactory.getSettingsService();
   settingsService.setSetting(STORAGE_KEYS.NOISE_SUPPRESSION_MODE, mode)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to save noise suppression mode:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to save noise suppression mode:', error));
 },
 ```
 
@@ -574,14 +574,14 @@ setNoiseSuppressionMode: (mode) => {
 // Restore noise suppression mode (with migration from old boolean)
 const savedMode = await settingsService.getSetting<string | null>(STORAGE_KEYS.NOISE_SUPPRESSION_MODE, null);
 if (savedMode !== null && (savedMode === 'off' || savedMode === 'standard' || savedMode === 'enhanced')) {
-  console.info('[Sokuji] [AudioStore] Restored noise suppression mode:', savedMode);
+  console.info('[GM MeetMind] [AudioStore] Restored noise suppression mode:', savedMode);
   set({ noiseSuppressionMode: savedMode as NoiseSuppressionMode });
 } else {
   // Migrate from old boolean setting
   const oldEnabled = await settingsService.getSetting<boolean | null>(STORAGE_KEYS.IS_NOISE_SUPPRESS_ENABLED, null);
   if (oldEnabled !== null) {
     const migratedMode: NoiseSuppressionMode = oldEnabled ? 'standard' : 'off';
-    console.info('[Sokuji] [AudioStore] Migrated noise suppression:', oldEnabled, '→', migratedMode);
+    console.info('[GM MeetMind] [AudioStore] Migrated noise suppression:', oldEnabled, '→', migratedMode);
     set({ noiseSuppressionMode: migratedMode });
     // Persist migrated value
     settingsService.setSetting(STORAGE_KEYS.NOISE_SUPPRESSION_MODE, migratedMode).catch(() => {});
@@ -885,7 +885,7 @@ useEffect(() => {
     .getRecorder()
     .setNoiseSuppressionMode(noiseSuppressionMode)
     .catch((error: unknown) => {
-      console.error('[Sokuji] [MainPanel] Failed to set noise suppression mode:', error);
+      console.error('[GM MeetMind] [MainPanel] Failed to set noise suppression mode:', error);
     });
 }, [noiseSuppressionMode, isSessionActive]);
 ```

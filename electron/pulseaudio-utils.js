@@ -22,7 +22,7 @@ let virtualSourceModule = null;
  * @returns {Promise<{stdout: string, stderr: string}>}
  */
 async function execWithLog(cmd, description = '') {
-  console.log(`[Sokuji] [PulseAudio] ${description || 'Executing:'} ${cmd}`);
+  console.log(`[GM MeetMind] [PulseAudio] ${description || 'Executing:'} ${cmd}`);
   return execPromise(cmd);
 }
 
@@ -35,11 +35,11 @@ async function execWithLog(cmd, description = '') {
 async function loadPulseModule(cmd, name) {
   const result = await execWithLog(cmd, `Creating ${name}:`);
   if (!result?.stdout) {
-    console.error(`[Sokuji] [PulseAudio] Failed to create ${name}`);
+    console.error(`[GM MeetMind] [PulseAudio] Failed to create ${name}`);
     return null;
   }
   const moduleId = result.stdout.trim();
-  console.log(`[Sokuji] [PulseAudio] ${name} created (ID: ${moduleId})`);
+  console.log(`[GM MeetMind] [PulseAudio] ${name} created (ID: ${moduleId})`);
   return moduleId;
 }
 
@@ -53,9 +53,9 @@ function unloadModuleSync(moduleId, name = 'module') {
   if (!moduleId) return null;
   try {
     execSync(`pactl unload-module ${moduleId}`);
-    console.log(`[Sokuji] [PulseAudio] ${name} removed (ID: ${moduleId})`);
+    console.log(`[GM MeetMind] [PulseAudio] ${name} removed (ID: ${moduleId})`);
   } catch (e) {
-    console.warn(`[Sokuji] [PulseAudio] Failed to unload ${name}:`, e.message);
+    console.warn(`[GM MeetMind] [PulseAudio] Failed to unload ${name}:`, e.message);
   }
   return null;
 }
@@ -73,7 +73,7 @@ function cleanupModulesByName(patterns) {
           const moduleId = line.split('\t')[0];
           if (moduleId) {
             execSync(`pactl unload-module ${moduleId}`);
-            console.log(`[Sokuji] [PulseAudio] Cleaned up: ${pattern} (ID: ${moduleId})`);
+            console.log(`[GM MeetMind] [PulseAudio] Cleaned up: ${pattern} (ID: ${moduleId})`);
           }
           break;
         }
@@ -90,7 +90,7 @@ function cleanupModulesByName(patterns) {
  */
 async function disconnectPhysicalPorts(targetMicName) {
   try {
-    console.log(`[Sokuji] [PulseAudio] Disconnecting physical ports from ${targetMicName}...`);
+    console.log(`[GM MeetMind] [PulseAudio] Disconnecting physical ports from ${targetMicName}...`);
     const { stdout } = await execPromise('pw-link -o | grep -v sokuji');
     const ports = stdout.trim().split('\n').filter(Boolean);
 
@@ -103,9 +103,9 @@ async function disconnectPhysicalPorts(targetMicName) {
         }
       }
     }
-    console.log(`[Sokuji] [PulseAudio] Finished disconnecting physical ports`);
+    console.log(`[GM MeetMind] [PulseAudio] Finished disconnecting physical ports`);
   } catch (e) {
-    console.log(`[Sokuji] [PulseAudio] Error disconnecting physical ports:`, e.message);
+    console.log(`[GM MeetMind] [PulseAudio] Error disconnecting physical ports:`, e.message);
   }
 }
 
@@ -123,25 +123,25 @@ async function connectPorts(outputPattern, inputPattern) {
     const outPorts = outs.trim().split('\n').filter(Boolean);
     const inPorts = ins.trim().split('\n').filter(Boolean);
 
-    console.log(`[Sokuji] [PulseAudio] Found output ports:`, outPorts);
-    console.log(`[Sokuji] [PulseAudio] Found input ports:`, inPorts);
+    console.log(`[GM MeetMind] [PulseAudio] Found output ports:`, outPorts);
+    console.log(`[GM MeetMind] [PulseAudio] Found input ports:`, inPorts);
 
     if (outPorts.length === 0 || inPorts.length === 0) {
-      console.log(`[Sokuji] [PulseAudio] No matching ports found`);
+      console.log(`[GM MeetMind] [PulseAudio] No matching ports found`);
       return false;
     }
 
     for (let i = 0; i < Math.min(outPorts.length, inPorts.length); i++) {
       try {
         await execPromise(`pw-link "${outPorts[i]}" "${inPorts[i]}"`);
-        console.log(`[Sokuji] [PulseAudio] Connected: ${outPorts[i]} -> ${inPorts[i]}`);
+        console.log(`[GM MeetMind] [PulseAudio] Connected: ${outPorts[i]} -> ${inPorts[i]}`);
       } catch (e) {
-        console.log(`[Sokuji] [PulseAudio] Connection may already exist: ${e.message}`);
+        console.log(`[GM MeetMind] [PulseAudio] Connection may already exist: ${e.message}`);
       }
     }
     return true;
   } catch (e) {
-    console.log(`[Sokuji] [PulseAudio] Error connecting ports:`, e.message);
+    console.log(`[GM MeetMind] [PulseAudio] Error connecting ports:`, e.message);
     return false;
   }
 }
@@ -163,14 +163,14 @@ async function disconnectPorts(outputPattern, inputPattern) {
     for (let i = 0; i < Math.min(outPorts.length, inPorts.length); i++) {
       try {
         await execPromise(`pw-link -d "${outPorts[i]}" "${inPorts[i]}"`);
-        console.log(`[Sokuji] [PulseAudio] Disconnected: ${outPorts[i]} from ${inPorts[i]}`);
+        console.log(`[GM MeetMind] [PulseAudio] Disconnected: ${outPorts[i]} from ${inPorts[i]}`);
       } catch (e) {
         // Connection doesn't exist, ignore
       }
     }
     return true;
   } catch (e) {
-    console.log(`[Sokuji] [PulseAudio] Error disconnecting ports:`, e.message);
+    console.log(`[GM MeetMind] [PulseAudio] Error disconnecting ports:`, e.message);
     return false;
   }
 }
@@ -182,13 +182,13 @@ async function disconnectPorts(outputPattern, inputPattern) {
 async function verifyConnections(pattern) {
   try {
     const { stdout } = await execPromise(`pw-link -l | grep -i ${pattern}`);
-    console.log(`[Sokuji] [PulseAudio] Current connections:`, stdout.trim());
+    console.log(`[GM MeetMind] [PulseAudio] Current connections:`, stdout.trim());
   } catch (e) {
     try {
       const { stdout } = await execPromise(`pactl list short | grep ${pattern}`);
-      console.log(`[Sokuji] [PulseAudio] Current devices:`, stdout.trim());
+      console.log(`[GM MeetMind] [PulseAudio] Current devices:`, stdout.trim());
     } catch (e2) {
-      console.log(`[Sokuji] [PulseAudio] Could not verify connections`);
+      console.log(`[GM MeetMind] [PulseAudio] Could not verify connections`);
     }
   }
 }
@@ -230,10 +230,10 @@ async function createVirtualAudioDevices() {
     // Verify
     await verifyConnections('sokuji');
 
-    console.log('[Sokuji] [PulseAudio] Virtual audio devices created successfully');
+    console.log('[GM MeetMind] [PulseAudio] Virtual audio devices created successfully');
     return true;
   } catch (error) {
-    console.error('[Sokuji] [PulseAudio] Failed to create virtual audio devices:', error);
+    console.error('[GM MeetMind] [PulseAudio] Failed to create virtual audio devices:', error);
     virtualSourceModule = unloadModuleSync(virtualSourceModule, 'virtual mic');
     virtualSinkModule = unloadModuleSync(virtualSinkModule, 'virtual sink');
     return false;
@@ -244,7 +244,7 @@ async function createVirtualAudioDevices() {
  * Remove all virtual audio devices
  */
 function removeVirtualAudioDevices() {
-  console.log('[Sokuji] [PulseAudio] Removing virtual audio devices...');
+  console.log('[GM MeetMind] [PulseAudio] Removing virtual audio devices...');
 
   virtualSourceModule = unloadModuleSync(virtualSourceModule, 'virtual mic');
   virtualSinkModule = unloadModuleSync(virtualSinkModule, 'virtual sink');
@@ -258,7 +258,7 @@ function removeVirtualAudioDevices() {
     'sokuji_system_audio_mic'
   ]);
 
-  console.log('[Sokuji] [PulseAudio] Virtual audio device cleanup completed');
+  console.log('[GM MeetMind] [PulseAudio] Virtual audio device cleanup completed');
 }
 
 // ============================================================================
@@ -325,10 +325,10 @@ async function isPulseAudioAvailable() {
   try {
     const { stdout } = await execWithLog('pactl info', 'Checking availability:');
     const isAvailable = stdout.includes('PulseAudio') || stdout.includes('Server Name');
-    console.log(`[Sokuji] [PulseAudio] Available: ${isAvailable}`);
+    console.log(`[GM MeetMind] [PulseAudio] Available: ${isAvailable}`);
     return isAvailable;
   } catch (error) {
-    console.error('[Sokuji] [PulseAudio] Error checking availability:', error);
+    console.error('[GM MeetMind] [PulseAudio] Error checking availability:', error);
     return false;
   }
 }
@@ -338,7 +338,7 @@ async function isPulseAudioAvailable() {
  * @returns {Promise<boolean>}
  */
 async function cleanupOrphanedDevices() {
-  console.log('[Sokuji] [PulseAudio] Checking for orphaned devices...');
+  console.log('[GM MeetMind] [PulseAudio] Checking for orphaned devices...');
 
   try {
     // Check sinks
@@ -349,7 +349,7 @@ async function cleanupOrphanedDevices() {
     ];
     for (const sink of orphanedSinks) {
       if (sinkList.includes(sink)) {
-        console.log(`[Sokuji] [PulseAudio] Found orphaned sink: ${sink}`);
+        console.log(`[GM MeetMind] [PulseAudio] Found orphaned sink: ${sink}`);
         cleanupModulesByName([sink]);
       }
     }
@@ -359,15 +359,15 @@ async function cleanupOrphanedDevices() {
     const orphanedSources = ['sokuji_virtual_mic'];
     for (const source of orphanedSources) {
       if (sourceList.includes(source)) {
-        console.log(`[Sokuji] [PulseAudio] Found orphaned source: ${source}`);
+        console.log(`[GM MeetMind] [PulseAudio] Found orphaned source: ${source}`);
         cleanupModulesByName([source]);
       }
     }
 
-    console.log('[Sokuji] [PulseAudio] Orphaned device check completed');
+    console.log('[GM MeetMind] [PulseAudio] Orphaned device check completed');
     return true;
   } catch (error) {
-    console.error('[Sokuji] [PulseAudio] Error checking for orphaned devices:', error);
+    console.error('[GM MeetMind] [PulseAudio] Error checking for orphaned devices:', error);
     return false;
   }
 }

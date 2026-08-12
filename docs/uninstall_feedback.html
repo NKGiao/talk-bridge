@@ -240,7 +240,7 @@
                 loaded: function(posthog) {
                     // If distinct_id is provided in URL, identify the user immediately
                     if (distinctIdFromURL) {
-                        console.debug('[Sokuji] [Uninstall Feedback] Using distinct_id from URL');
+                        console.debug('[GM MeetMind] [Uninstall Feedback] Using distinct_id from URL');
                         posthog.identify(distinctIdFromURL);
                     }
                 }
@@ -248,7 +248,7 @@
 
             posthog.init(POSTHOG_KEY, posthogConfig);
         } else {
-            console.info('[Sokuji] [Uninstall Feedback] PostHog analytics disabled (no key configured)');
+            console.info('[GM MeetMind] [Uninstall Feedback] PostHog analytics disabled (no key configured)');
             // Create a stub posthog object for the rest of the page
             window.posthog = {
                 capture: function() {},
@@ -268,7 +268,7 @@
             // User identification is already handled in PostHog initialization
             // if distinct_id was provided in URL
             if (distinctIdFromURL) {
-                console.debug('[Sokuji] [Uninstall Feedback] Survey initialized with distinct_id from URL');
+                console.debug('[GM MeetMind] [Uninstall Feedback] Survey initialized with distinct_id from URL');
             }
             
             fetchAndInitializeSurvey();

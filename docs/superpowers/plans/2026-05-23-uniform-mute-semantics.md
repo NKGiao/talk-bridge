@@ -383,14 +383,14 @@ setMode: (target) => {
 
     // Persist (best-effort; errors logged).
     settingsService.setSetting(STORAGE_KEYS.MODE, target)
-      .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist mode:', error));
+      .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist mode:', error));
     if ('isMicMuted' in patch) {
       settingsService.setSetting(STORAGE_KEYS.IS_MIC_MUTED, patch.isMicMuted)
-        .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isMicMuted:', error));
+        .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isMicMuted:', error));
     }
     if ('isParticipantMuted' in patch) {
       settingsService.setSetting(STORAGE_KEYS.IS_PARTICIPANT_MUTED, patch.isParticipantMuted)
-        .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isParticipantMuted:', error));
+        .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isParticipantMuted:', error));
     }
 
     return patch;
@@ -404,18 +404,18 @@ setMode: (target) => {
 setMicMuted: (muted) => {
   const settingsService = ServiceFactory.getSettingsService();
   settingsService.setSetting(STORAGE_KEYS.IS_MIC_MUTED, muted)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isMicMuted:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isMicMuted:', error));
   settingsService.setSetting(STORAGE_KEYS.IS_INPUT_DEVICE_ON, !muted)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isInputDeviceOn:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isInputDeviceOn:', error));
   set({ isMicMuted: muted, isInputDeviceOn: !muted });
 },
 
 setMonitorMuted: (muted) => {
   const settingsService = ServiceFactory.getSettingsService();
   settingsService.setSetting(STORAGE_KEYS.IS_MONITOR_MUTED, muted)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isMonitorMuted:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isMonitorMuted:', error));
   settingsService.setSetting(STORAGE_KEYS.IS_MONITOR_DEVICE_ON, !muted)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isMonitorDeviceOn:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isMonitorDeviceOn:', error));
   set((state) => {
     const { audioService } = state;
     if (audioService) audioService.setMonitorVolume(muted ? 0 : 1);
@@ -426,9 +426,9 @@ setMonitorMuted: (muted) => {
 setParticipantMuted: (muted) => {
   const settingsService = ServiceFactory.getSettingsService();
   settingsService.setSetting(STORAGE_KEYS.IS_PARTICIPANT_MUTED, muted)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isParticipantMuted:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isParticipantMuted:', error));
   settingsService.setSetting(STORAGE_KEYS.IS_SYSTEM_AUDIO_CAPTURE_ENABLED, !muted)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isSystemAudioCaptureEnabled:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isSystemAudioCaptureEnabled:', error));
   set({ isParticipantMuted: muted, isSystemAudioCaptureEnabled: !muted });
 },
 ```
@@ -452,9 +452,9 @@ to:
 setInputDeviceOn: (on) => {
   const settingsService = ServiceFactory.getSettingsService();
   settingsService.setSetting(STORAGE_KEYS.IS_INPUT_DEVICE_ON, on)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to save input device state:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to save input device state:', error));
   settingsService.setSetting(STORAGE_KEYS.IS_MIC_MUTED, !on)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist isMicMuted:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist isMicMuted:', error));
   set({ isInputDeviceOn: on, isMicMuted: !on });
 },
 ```
@@ -480,7 +480,7 @@ if (savedMode === 'speaker' || savedMode === 'participant' || savedMode === 'bot
     'speaker'; // includes "all off" per spec
   set({ mode: derived });
   settingsService.setSetting(STORAGE_KEYS.MODE, derived)
-    .catch(error => console.error('[Sokuji] [AudioStore] Failed to persist initial mode:', error));
+    .catch(error => console.error('[GM MeetMind] [AudioStore] Failed to persist initial mode:', error));
 }
 
 const savedIsMicMuted = await settingsService.getSetting<boolean | null>(STORAGE_KEYS.IS_MIC_MUTED, null);
@@ -513,11 +513,11 @@ After the migration completes successfully (new keys written), schedule legacy k
 // Once-only cleanup of legacy on-disk keys. Safe to delete because the
 // new keys are now populated and authoritative.
 settingsService.removeSetting?.(STORAGE_KEYS.IS_INPUT_DEVICE_ON)
-  .catch(error => console.warn('[Sokuji] [AudioStore] Failed to remove legacy isInputDeviceOn key:', error));
+  .catch(error => console.warn('[GM MeetMind] [AudioStore] Failed to remove legacy isInputDeviceOn key:', error));
 settingsService.removeSetting?.(STORAGE_KEYS.IS_MONITOR_DEVICE_ON)
-  .catch(error => console.warn('[Sokuji] [AudioStore] Failed to remove legacy isMonitorDeviceOn key:', error));
+  .catch(error => console.warn('[GM MeetMind] [AudioStore] Failed to remove legacy isMonitorDeviceOn key:', error));
 settingsService.removeSetting?.(STORAGE_KEYS.IS_SYSTEM_AUDIO_CAPTURE_ENABLED)
-  .catch(error => console.warn('[Sokuji] [AudioStore] Failed to remove legacy isSystemAudioCaptureEnabled key:', error));
+  .catch(error => console.warn('[GM MeetMind] [AudioStore] Failed to remove legacy isSystemAudioCaptureEnabled key:', error));
 ```
 
 If `removeSetting` doesn't exist on the SettingsService interface, add it (one-line method) in this same task. If adding the method is non-trivial, fall back to setting the legacy keys to `null` and document the deferred cleanup.
@@ -643,7 +643,7 @@ Inside the `if (shouldCaptureParticipantAudio) { ... }` block, after the existin
 // resumes via the useEffect) but no audio flows to the AI client.
 if (isParticipantMuted) {
   await audioService.pauseParticipantAudioRecording?.()
-    .catch(err => console.warn('[Sokuji] [MainPanel] Failed to apply initial participant mute:', err));
+    .catch(err => console.warn('[GM MeetMind] [MainPanel] Failed to apply initial participant mute:', err));
 }
 ```
 
@@ -751,10 +751,10 @@ useEffect(() => {
   const audioService = audioServiceRef.current;
   if (!isParticipantMuted) {
     void audioService.resumeParticipantAudioRecording?.()
-      .catch(err => console.warn('[Sokuji] [MainPanel] Failed to resume participant audio:', err));
+      .catch(err => console.warn('[GM MeetMind] [MainPanel] Failed to resume participant audio:', err));
   } else {
     void audioService.pauseParticipantAudioRecording?.()
-      .catch(err => console.warn('[Sokuji] [MainPanel] Failed to pause participant audio:', err));
+      .catch(err => console.warn('[GM MeetMind] [MainPanel] Failed to pause participant audio:', err));
   }
 }, [isParticipantMuted, isSessionActive, participantChannelActive]);
 ```

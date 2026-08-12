@@ -111,7 +111,7 @@ Add to the audio service initialization (Extension branch only):
 navigator.mediaDevices.addEventListener('devicechange', () => {
   // Re-apply the default sink so passthrough output follows OS default.
   this.passthroughAudioContext?.setSinkId?.('default')
-    .catch(err => console.warn('[Sokuji] Failed to re-apply default sink:', err));
+    .catch(err => console.warn('[GM MeetMind] Failed to re-apply default sink:', err));
 });
 ```
 

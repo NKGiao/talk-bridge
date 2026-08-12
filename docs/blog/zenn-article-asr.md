@@ -518,7 +518,7 @@ https://huggingface.co/datasets/jiangzhuo9357/sherpa-onnx-asr-models/resolve/mai
 
 RTF（Real-Time Factor）は処理時間と音声長の比率で、1.0 未満であればリアルタイムより高速に処理できていることを意味します。Moonshine Tiny は RTF 0.058 と、音声の約17倍の速度で認識を完了しています。
 
-上記は代表的なモデルの結果です。Sokuji では Whisper、Paraformer、NeMo、Zipformer など **20以上のオフラインASRモデル**に対応しています。他のモデルのパフォーマンスは、[ASR デモページ](https://huggingface.co/spaces/jiangzhuo9357/sherpa-onnx-asr-demos)や [Sokuji](https://github.com/kizuna-ai-lab/sokuji) でお手元のブラウザで実際にお試しいただけます。
+上記は代表的なモデルの結果です。Sokuji では Whisper、Paraformer、NeMo、Zipformer など **20以上のオフラインASRモデル**に対応しています。他のモデルのパフォーマンスは、[ASR デモページ](https://huggingface.co/spaces/jiangzhuo9357/sherpa-onnx-asr-demos)や [GM MeetMind](https://github.com/kizuna-ai-lab/sokuji) でお手元のブラウザで実際にお試しいただけます。
 
 - ネットワーク遅延なし、プライバシーも完全に保護
 

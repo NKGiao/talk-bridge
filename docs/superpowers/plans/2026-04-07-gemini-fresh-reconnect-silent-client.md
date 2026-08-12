@@ -378,7 +378,7 @@ Find the `onclose` callback inside `connect()` (around line 421). Existing code:
 
 ```typescript
           onclose: (event: CloseEvent) => {
-            console.info('[Sokuji] [GeminiClient] Session closed', event);
+            console.info('[GM MeetMind] [GeminiClient] Session closed', event);
             this.session = null;
 
             // If already reconnecting (triggered by goAway), skip — reconnect() handles it
@@ -398,7 +398,7 @@ Replace the entire block (from the `// Unexpected close — attempt reconnection
 
 ```typescript
           onclose: (event: CloseEvent) => {
-            console.info('[Sokuji] [GeminiClient] Session closed', event);
+            console.info('[GM MeetMind] [GeminiClient] Session closed', event);
             this.session = null;
 
             // If already reconnecting (triggered by goAway), skip — reconnect() handles it
@@ -456,10 +456,10 @@ Find the dev-only helper (around line 935). Existing:
 ```typescript
   simulateDisconnectForTesting(): void {
     if (!this.session || !this.savedResumptionHandle) {
-      console.warn('[Sokuji] [GeminiClient] Cannot simulate disconnect: no session or no resumption handle');
+      console.warn('[GM MeetMind] [GeminiClient] Cannot simulate disconnect: no session or no resumption handle');
       return;
     }
-    console.info('[Sokuji] [GeminiClient] DEV: Simulating disconnect to test reconnection');
+    console.info('[GM MeetMind] [GeminiClient] DEV: Simulating disconnect to test reconnection');
     this.session.close();  // Forces onclose → triggers reconnect path
   }
 ```
@@ -469,10 +469,10 @@ Replace with:
 ```typescript
   simulateDisconnectForTesting(): void {
     if (!this.session) {
-      console.warn('[Sokuji] [GeminiClient] Cannot simulate disconnect: no session');
+      console.warn('[GM MeetMind] [GeminiClient] Cannot simulate disconnect: no session');
       return;
     }
-    console.info('[Sokuji] [GeminiClient] DEV: Simulating disconnect to test reconnection');
+    console.info('[GM MeetMind] [GeminiClient] DEV: Simulating disconnect to test reconnection');
     this.session.close();  // Forces onclose → triggers reconnect path (fresh or resume)
   }
 ```
@@ -549,7 +549,7 @@ Replace with:
     // the OTHER client, that client's onClose also calls this. The Zustand store
     // updates synchronously, so checking isSessionActive here catches the second call.
     if (!useSessionStore.getState().isSessionActive) {
-      console.info('[Sokuji] [MainPanel] disconnectConversation re-entry blocked (already inactive)');
+      console.info('[GM MeetMind] [MainPanel] disconnectConversation re-entry blocked (already inactive)');
       return;
     }
     setIsReconnecting(false);
@@ -654,7 +654,7 @@ Find the speaker `onClose` handler inside `setupClientListeners` (around line 67
 
 ```typescript
       onClose: async (event: any) => {
-        console.info('[Sokuji] [MainPanel] Connection closed, cleaning up session', event);
+        console.info('[GM MeetMind] [MainPanel] Connection closed, cleaning up session', event);
         setIsReconnecting(false);
 
         // Track disconnection
@@ -672,7 +672,7 @@ Find the speaker `onClose` handler inside `setupClientListeners` (around line 67
         const systemClient = systemAudioClientRef.current;
         if (systemClient) {
           try {
-            console.info('[Sokuji] [MainPanel] Speaker disconnected, also disconnecting participant client');
+            console.info('[GM MeetMind] [MainPanel] Speaker disconnected, also disconnecting participant client');
             await systemClient.disconnect();
             systemClient.reset();
             systemAudioClientRef.current = null;
@@ -690,7 +690,7 @@ Find the speaker `onClose` handler inside `setupClientListeners` (around line 67
               audioService.clearStreamingTrack('system-audio-assistant');
             }
           } catch (error) {
-            console.warn('[Sokuji] [MainPanel] Error disconnecting participant client:', error);
+            console.warn('[GM MeetMind] [MainPanel] Error disconnecting participant client:', error);
           }
         }
 
@@ -704,7 +704,7 @@ Find the speaker `onClose` handler inside `setupClientListeners` (around line 67
               await audioService.stopRecording();
             }
           } catch (error) {
-            console.warn('[Sokuji] [MainPanel] Error cleaning up recorder on close:', error);
+            console.warn('[GM MeetMind] [MainPanel] Error cleaning up recorder on close:', error);
           }
 
           // Interrupt any playing audio
@@ -717,7 +717,7 @@ Replace with:
 
 ```typescript
       onClose: async (event: any) => {
-        console.info('[Sokuji] [MainPanel] Speaker client closed, tearing down session', event);
+        console.info('[GM MeetMind] [MainPanel] Speaker client closed, tearing down session', event);
 
         // Track disconnection (analytics distinguishes client-side close from user stop)
         trackEvent('connection_status', {
@@ -768,7 +768,7 @@ Find `createParticipantEventHandlers` (around line 268). Existing `onClose`:
 
 ```typescript
     onClose: async () => {
-      console.info('[Sokuji] [MainPanel] Participant audio client closed (triggered by speaker disconnect or manual stop)');
+      console.info('[GM MeetMind] [MainPanel] Participant audio client closed (triggered by speaker disconnect or manual stop)');
     }
 ```
 
@@ -776,7 +776,7 @@ Replace with:
 
 ```typescript
     onClose: async () => {
-      console.info('[Sokuji] [MainPanel] Participant client closed, tearing down session');
+      console.info('[GM MeetMind] [MainPanel] Participant client closed, tearing down session');
 
       // Track disconnection (analytics distinguishes client-side close from user stop)
       trackEvent('connection_status', {
@@ -877,14 +877,14 @@ Replace with:
         e.preventDefault();
         const client = clientRef.current;
         if (client && typeof (client as any).simulateDisconnectForTesting === 'function') {
-          console.info('[Sokuji] [MainPanel] DEV: Simulating speaker disconnect');
+          console.info('[GM MeetMind] [MainPanel] DEV: Simulating speaker disconnect');
           (client as any).simulateDisconnectForTesting();
         }
       } else if (e.key === 'H') {
         e.preventDefault();
         const participantClient = systemAudioClientRef.current;
         if (participantClient && typeof (participantClient as any).simulateDisconnectForTesting === 'function') {
-          console.info('[Sokuji] [MainPanel] DEV: Simulating participant disconnect');
+          console.info('[GM MeetMind] [MainPanel] DEV: Simulating participant disconnect');
           (participantClient as any).simulateDisconnectForTesting();
         }
       }

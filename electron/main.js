@@ -31,14 +31,14 @@ if (process.platform === 'linux') {
   // For other platforms, provide stub implementations
   audioUtils = {
     createVirtualAudioDevices: async () => {
-      console.log('[Sokuji] [Main] Virtual audio devices not supported on this platform');
+      console.log('[GM MeetMind] [Main] Virtual audio devices not supported on this platform');
       return false;
     },
     removeVirtualAudioDevices: () => {
-      console.log('[Sokuji] [Main] Virtual audio device cleanup not needed on this platform');
+      console.log('[GM MeetMind] [Main] Virtual audio device cleanup not needed on this platform');
     },
     cleanupOrphanedDevices: async () => {
-      console.log('[Sokuji] [Main] No orphaned devices to clean on this platform');
+      console.log('[GM MeetMind] [Main] No orphaned devices to clean on this platform');
       return true;
     }
   };
@@ -61,7 +61,7 @@ const {
 {
   const { initMain } = require('electron-audio-loopback');
   initMain();
-  console.log('[Sokuji] [Main] electron-audio-loopback initialized for', process.platform);
+  console.log('[GM MeetMind] [Main] electron-audio-loopback initialized for', process.platform);
 }
 
 // Set application name for PulseAudio
@@ -77,7 +77,7 @@ app.commandLine.appendSwitch('enable-unsafe-webgpu');
 // other. Vulkan is dropped on Wayland, where it would otherwise leave the
 // window permanently unmapped and the app invisible (issue #389).
 const appliedGpuFlags = applyLinuxGpuFlags(app);
-console.log('[Sokuji] [Main] GPU flags:', JSON.stringify(appliedGpuFlags));
+console.log('[GM MeetMind] [Main] GPU flags:', JSON.stringify(appliedGpuFlags));
 
 // Keep the renderer (and its local-inference Web Worker) running at full speed when
 // the Sokuji window is minimized/hidden/occluded — the common case while the user is
@@ -345,10 +345,10 @@ function createWindow() {
 
   // Set custom User Agent for the window
   mainWindow.webContents.setUserAgent(customUserAgent);
-  console.log('[Sokuji] [Main] Custom User Agent set:', customUserAgent);
+  console.log('[GM MeetMind] [Main] Custom User Agent set:', customUserAgent);
 
   // Load the app
-  console.log('[Sokuji] [Main] Development mode:', isDev, 'MODE:', import.meta.env.MODE, 'isPackaged:', app.isPackaged);
+  console.log('[GM MeetMind] [Main] Development mode:', isDev, 'MODE:', import.meta.env.MODE, 'isPackaged:', app.isPackaged);
   
   // Track window load time
   const loadStartTime = Date.now();
@@ -356,7 +356,7 @@ function createWindow() {
   // Add performance tracking for page load
   mainWindow.webContents.on('did-finish-load', () => {
     const loadEndTime = Date.now();
-    console.log(`[Sokuji] [Main] Page loaded in ${loadEndTime - loadStartTime}ms`);
+    console.log(`[GM MeetMind] [Main] Page loaded in ${loadEndTime - loadStartTime}ms`);
 
     // Forward the virtual-audio-device status computed during startup, now
     // that the renderer is actually able to receive it.
@@ -367,15 +367,15 @@ function createWindow() {
   
   mainWindow.webContents.on('dom-ready', () => {
     const domReadyTime = Date.now();
-    console.log(`[Sokuji] [Main] DOM ready in ${domReadyTime - loadStartTime}ms`);
+    console.log(`[GM MeetMind] [Main] DOM ready in ${domReadyTime - loadStartTime}ms`);
   });
   
   if (isDev) {
-    console.log(`[Sokuji] [Main] Loading from http://localhost:5173 at ${loadStartTime}`);
+    console.log(`[GM MeetMind] [Main] Loading from http://localhost:5173 at ${loadStartTime}`);
     mainWindow.loadURL('http://localhost:5173');
   } else {
     const indexPath = path.join(app.getAppPath(), 'build/index.html');
-    console.log('[Sokuji] [Main] Loading from:', indexPath);
+    console.log('[GM MeetMind] [Main] Loading from:', indexPath);
     mainWindow.loadFile(indexPath);
   }
 
@@ -415,15 +415,15 @@ app.whenReady().then(async () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8787';
     const origin = isDev ? 'http://localhost:5173' : `file://${__dirname}`;
 
-    console.log(`[Sokuji] [Main] Initializing Better Auth adapter with backend: ${backendUrl}, origin: ${origin}`);
+    console.log(`[GM MeetMind] [Main] Initializing Better Auth adapter with backend: ${backendUrl}, origin: ${origin}`);
 
     betterAuthAdapter({
       backendUrl,
       origin
     });
-    console.log('[Sokuji] [Main] Better Auth adapter initialized');
+    console.log('[GM MeetMind] [Main] Better Auth adapter initialized');
   } catch (error) {
-    console.error('[Sokuji] [Main] Error initializing Better Auth adapter:', error);
+    console.error('[GM MeetMind] [Main] Error initializing Better Auth adapter:', error);
   }
 
   // Initialize WebSocket header injection (must be before any WebSocket connections)
@@ -432,9 +432,9 @@ app.whenReady().then(async () => {
   // Clean up any orphaned devices
   try {
     await cleanupOrphanedDevices();
-    console.log('[Sokuji] [Main] Orphaned devices cleaned up successfully');
+    console.log('[GM MeetMind] [Main] Orphaned devices cleaned up successfully');
   } catch (error) {
-    console.error('[Sokuji] [Main] Error cleaning up orphaned devices:', error);
+    console.error('[GM MeetMind] [Main] Error cleaning up orphaned devices:', error);
   }
 
   // Start virtual audio devices before creating the window
@@ -442,10 +442,10 @@ app.whenReady().then(async () => {
     const devicesCreated = await createVirtualAudioDevices();
     lastAudioStatus = await buildAudioStatus(devicesCreated);
     if (!devicesCreated) {
-      console.error('[Sokuji] [Main] Virtual audio device status:', lastAudioStatus.reason, '-', lastAudioStatus.message);
+      console.error('[GM MeetMind] [Main] Virtual audio device status:', lastAudioStatus.reason, '-', lastAudioStatus.message);
     }
     if (devicesCreated) {
-      console.log('[Sokuji] [Main] Virtual audio devices created successfully');
+      console.log('[GM MeetMind] [Main] Virtual audio devices created successfully');
       
       // Connect the virtual speaker to the default output device
       // try {
@@ -458,18 +458,18 @@ app.whenReady().then(async () => {
       //   // Connect virtual speaker to default output
       //   const connected = await connectVirtualSpeakerToOutput(defaultDeviceInfo);
       //   if (connected) {
-      //     console.log('[Sokuji] [Main] Successfully connected virtual speaker to default output device');
+      //     console.log('[GM MeetMind] [Main] Successfully connected virtual speaker to default output device');
       //   } else {
-      //     console.error('[Sokuji] [Main] Failed to connect virtual speaker to default output device');
+      //     console.error('[GM MeetMind] [Main] Failed to connect virtual speaker to default output device');
       //   }
       // } catch (connectionError) {
-      //   console.error('[Sokuji] [Main] Error connecting virtual speaker to default output:', connectionError);
+      //   console.error('[GM MeetMind] [Main] Error connecting virtual speaker to default output:', connectionError);
       // }
     } else {
-      console.error('[Sokuji] [Main] Failed to create virtual audio devices');
+      console.error('[GM MeetMind] [Main] Failed to create virtual audio devices');
     }
   } catch (error) {
-    console.error('[Sokuji] [Main] Error creating virtual audio devices:', error);
+    console.error('[GM MeetMind] [Main] Error creating virtual audio devices:', error);
     lastAudioStatus = { ok: false, platform: process.platform, reason: 'other', message: error?.message || 'Failed to create virtual audio devices' };
   }
 
@@ -479,13 +479,13 @@ app.whenReady().then(async () => {
   // Request microphone permission on macOS before creating window
   if (process.platform === 'darwin') {
     const micStatus = systemPreferences.getMediaAccessStatus('microphone');
-    console.log('[Sokuji] [Main] Microphone permission status:', micStatus);
+    console.log('[GM MeetMind] [Main] Microphone permission status:', micStatus);
 
     if (micStatus === 'not-determined') {
       const granted = await systemPreferences.askForMediaAccess('microphone');
-      console.log('[Sokuji] [Main] Microphone permission granted:', granted);
+      console.log('[GM MeetMind] [Main] Microphone permission granted:', granted);
     } else if (micStatus === 'denied') {
-      console.warn('[Sokuji] [Main] Microphone permission denied - please enable in System Preferences > Privacy & Security > Microphone');
+      console.warn('[GM MeetMind] [Main] Microphone permission denied - please enable in System Preferences > Privacy & Security > Microphone');
     }
   }
 
@@ -500,15 +500,15 @@ app.whenReady().then(async () => {
 
 // Ensure cleanup happens before app exits
 const cleanupAndExit = () => {
-  console.log('[Sokuji] [Main] Cleaning up virtual audio devices before exit...');
+  console.log('[GM MeetMind] [Main] Cleaning up virtual audio devices before exit...');
   removeVirtualAudioDevices();
   nativeHost.stop();
-  console.log('[Sokuji] [Main] Virtual audio devices cleaned up successfully');
+  console.log('[GM MeetMind] [Main] Virtual audio devices cleaned up successfully');
 };
 
 // Create a more robust exit handler that ensures cleanup happens
 const handleExit = (signal) => {
-  console.log(`[Sokuji] [Main] Received ${signal} signal. Ensuring cleanup before exit...`);
+  console.log(`[GM MeetMind] [Main] Received ${signal} signal. Ensuring cleanup before exit...`);
   
   // Perform cleanup synchronously
   cleanupAndExit();
@@ -525,11 +525,11 @@ app.on('before-quit', cleanupAndExit);
 process.on('SIGINT', () => handleExit('SIGINT'));
 process.on('SIGTERM', () => handleExit('SIGTERM'));
 process.on('uncaughtException', (error) => {
-  console.error('[Sokuji] [Main] Uncaught exception:', error);
+  console.error('[GM MeetMind] [Main] Uncaught exception:', error);
   handleExit('uncaughtException');
 });
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('[Sokuji] [Main] Unhandled rejection at:', promise, 'reason:', reason);
+  console.error('[GM MeetMind] [Main] Unhandled rejection at:', promise, 'reason:', reason);
   handleExit('unhandledRejection');
 });
 
@@ -705,7 +705,7 @@ ipcMain.handle('check-audio-system', async () => {
             process.platform === 'darwin' ? 'Sokuji Virtual Audio driver installed by PKG installer' : null
     };
   } catch (error) {
-    console.error('[Sokuji] [Main] Error checking audio system status:', error);
+    console.error('[GM MeetMind] [Main] Error checking audio system status:', error);
     return {
       audioSystemAvailable: false,
       systemType: 'none',
@@ -734,7 +734,7 @@ ipcMain.handle('check-vbcable', async () => {
       };
     }
   } catch (error) {
-    console.error('[Sokuji] [Main] Error in VB-CABLE check:', error);
+    console.error('[GM MeetMind] [Main] Error in VB-CABLE check:', error);
     return {
       error: error.message
     };
@@ -745,7 +745,7 @@ ipcMain.handle('check-vbcable', async () => {
 ipcMain.handle('install-vbcable', async () => {
   try {
     if (process.platform === 'win32') {
-      console.log('[Sokuji] [Main] VB-CABLE installation requested from renderer');
+      console.log('[GM MeetMind] [Main] VB-CABLE installation requested from renderer');
       const installer = require('./vb-cable-installer');
       const result = await installer.ensureVBCableInstalled();
       return {
@@ -760,7 +760,7 @@ ipcMain.handle('install-vbcable', async () => {
       };
     }
   } catch (error) {
-    console.error('[Sokuji] [Main] Error installing VB-CABLE:', error);
+    console.error('[GM MeetMind] [Main] Error installing VB-CABLE:', error);
     return {
       success: false,
       error: error.message
@@ -787,7 +787,7 @@ ipcMain.handle('check-sokuji-audio', async () => {
       };
     }
   } catch (error) {
-    console.error('[Sokuji] [Main] Error in Sokuji Virtual Audio check:', error);
+    console.error('[GM MeetMind] [Main] Error in Sokuji Virtual Audio check:', error);
     return {
       installed: false,
       error: error.message
@@ -805,7 +805,7 @@ ipcMain.handle('open-directory', (event, dirPath) => {
     shell.openPath(dirPath);
     return { success: true };
   } catch (error) {
-    console.error('[Sokuji] [Main] Error opening directory:', error);
+    console.error('[GM MeetMind] [Main] Error opening directory:', error);
     return { success: false, error: error.message };
   }
 });
@@ -817,7 +817,7 @@ ipcMain.handle('open-external', async (event, url) => {
     await shell.openExternal(url);
     return { success: true };
   } catch (error) {
-    console.error('[Sokuji] [Main] Error opening external URL:', error);
+    console.error('[GM MeetMind] [Main] Error opening external URL:', error);
     return { success: false, error: error.message };
   }
 });
@@ -836,7 +836,7 @@ ipcMain.handle('create-virtual-speaker', async () => {
       message: result ? 'Virtual audio devices created successfully' : status.message
     };
   } catch (error) {
-    console.error('[Sokuji] [Main] Error creating virtual audio devices:', error);
+    console.error('[GM MeetMind] [Main] Error creating virtual audio devices:', error);
     sendAudioStatus({ ok: false, platform: process.platform, reason: 'other', message: error?.message || 'Failed to create virtual audio devices' });
     return {
       success: false,
@@ -898,7 +898,7 @@ ipcMain.handle('start-app-audio-capture', async (event, deviceId) => {
     );
     return ok ? { ok: true } : { ok: false, error: 'Capture helper unavailable' };
   } catch (error) {
-    console.error('[Sokuji] [Main] Failed to start application audio capture:', error);
+    console.error('[GM MeetMind] [Main] Failed to start application audio capture:', error);
     return { ok: false, error: error.message };
   }
 });
@@ -912,7 +912,7 @@ ipcMain.handle('stop-app-audio-capture', async () => {
     const { stopCapture } = require(helperModule);
     stopCapture();
   } catch (error) {
-    console.warn('[Sokuji] [Main] Failed to stop application audio capture:', error);
+    console.warn('[GM MeetMind] [Main] Failed to stop application audio capture:', error);
   }
   return { ok: true };
 });
@@ -937,10 +937,10 @@ ipcMain.handle('fix-monitor-volume', async () => {
     await execFileAsync('pactl', ['set-source-volume', monitorName, '100%'], {
       timeout: 2000,
     });
-    console.log(`[Sokuji] [Main] Fixed monitor volume for ${monitorName}`);
+    console.log(`[GM MeetMind] [Main] Fixed monitor volume for ${monitorName}`);
     return { ok: true, monitor: monitorName };
   } catch (err) {
-    console.error('[Sokuji] [Main] Failed to fix monitor volume:', err.message);
+    console.error('[GM MeetMind] [Main] Failed to fix monitor volume:', err.message);
     return { ok: false, error: err.message };
   }
 });
@@ -1041,7 +1041,7 @@ function initWebSocketHeaderInjection() {
     }
   );
 
-  console.log('[Sokuji] [Main] Combined header injection initialized');
+  console.log('[GM MeetMind] [Main] Combined header injection initialized');
 }
 
 // IPC: renderer registers headers for a host before opening a WebSocket
@@ -1056,7 +1056,7 @@ ipcMain.handle('ws-headers-set', (event, { host, headers }) => {
     .map(([k, v]) => [k, String(v)]);
   const headerMap = new Map(entries);
   wsHeaderRules.set(host, headerMap);
-  console.log(`[Sokuji] [Main] WS headers registered for ${host}: ${[...headerMap.keys()].join(', ')}`);
+  console.log(`[GM MeetMind] [Main] WS headers registered for ${host}: ${[...headerMap.keys()].join(', ')}`);
   return { success: true };
 });
 
@@ -1066,7 +1066,7 @@ ipcMain.handle('ws-headers-clear', (event, { host }) => {
     return { success: false, error: 'Invalid arguments: host required' };
   }
   wsHeaderRules.delete(host);
-  console.log(`[Sokuji] [Main] WS headers cleared for ${host}`);
+  console.log(`[GM MeetMind] [Main] WS headers cleared for ${host}`);
   return { success: true };
 });
 
@@ -1111,7 +1111,7 @@ ipcMain.handle('open-privacy-settings', async (event, pane) => {
     await shell.openExternal(`x-apple.systempreferences:com.apple.preference.security?${anchor}`);
     return { ok: true };
   } catch (error) {
-    console.error('[Sokuji] [Main] Failed to open privacy settings:', error);
+    console.error('[GM MeetMind] [Main] Failed to open privacy settings:', error);
     return { ok: false, error: error.message };
   }
 });
@@ -1124,12 +1124,12 @@ ipcMain.handle('check-screen-recording-permission', async () => {
 
   try {
     const status = systemPreferences.getMediaAccessStatus('screen');
-    console.log('[Sokuji] [Main] Screen recording permission status:', status);
+    console.log('[GM MeetMind] [Main] Screen recording permission status:', status);
     // Just return the raw status - don't try to trigger permission here
     // Calling desktopCapturer.getSources() would change 'not-determined' to 'denied'
     return { status, platform: 'darwin' };
   } catch (error) {
-    console.error('[Sokuji] [Main] Error checking screen recording permission:', error);
+    console.error('[GM MeetMind] [Main] Error checking screen recording permission:', error);
     return { status: 'unknown', platform: 'darwin', error: error.message };
   }
 });

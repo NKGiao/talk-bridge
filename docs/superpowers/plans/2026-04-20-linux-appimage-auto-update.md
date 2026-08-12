@@ -268,24 +268,24 @@ Spec pre-requisite verification. The electron-audio-loopback migration is alread
 
 With the AppImage from Task 5 step 4 still running, check its stdout for any log line emitted from `electron/main.js` startup. Add one if none exists — temporarily insert at the top of `app.whenReady()` in `electron/main.js`:
 ```js
-console.log('[Sokuji] [Main] process.env.APPIMAGE =', process.env.APPIMAGE || '<unset>');
+console.log('[GM MeetMind] [Main] process.env.APPIMAGE =', process.env.APPIMAGE || '<unset>');
 ```
 
 Re-build (`npx electron-builder --linux AppImage --x64`) and launch again.
 
-Expected stdout: `[Sokuji] [Main] process.env.APPIMAGE = /tmp/.mount_Sokuji...` (a real path, not `<unset>`).
+Expected stdout: `[GM MeetMind] [Main] process.env.APPIMAGE = /tmp/.mount_Sokuji...` (a real path, not `<unset>`).
 
 - [ ] **Step 2: Verify `pactl` is reachable from inside AppImage**
 
-In the same AppImage session, check the main-process logs for `[Sokuji] [PulseAudio] Checking sinks: pactl list sinks short`. Confirm the subsequent `Orphaned device check completed` line appears without any `ENOENT` / `command not found` errors.
+In the same AppImage session, check the main-process logs for `[GM MeetMind] [PulseAudio] Checking sinks: pactl list sinks short`. Confirm the subsequent `Orphaned device check completed` line appears without any `ENOENT` / `command not found` errors.
 
 - [ ] **Step 3: Verify virtual TTS devices are created**
 
 Check logs for:
-- `[Sokuji] [PulseAudio] virtual sink created (ID: <n>)`
-- `[Sokuji] [PulseAudio] virtual mic created (ID: <n>)`
-- `[Sokuji] [PulseAudio] Connected: sokuji_virtual_output:monitor_FL -> input.sokuji_virtual_mic:input_FL`
-- `[Sokuji] [PulseAudio] Virtual audio devices created successfully`
+- `[GM MeetMind] [PulseAudio] virtual sink created (ID: <n>)`
+- `[GM MeetMind] [PulseAudio] virtual mic created (ID: <n>)`
+- `[GM MeetMind] [PulseAudio] Connected: sokuji_virtual_output:monitor_FL -> input.sokuji_virtual_mic:input_FL`
+- `[GM MeetMind] [PulseAudio] Virtual audio devices created successfully`
 
 From a separate host terminal, also confirm: `pactl list sinks short | grep sokuji_virtual_output` returns a line.
 
@@ -297,7 +297,7 @@ Expected: full pipeline works identically to the `.deb` install.
 
 - [ ] **Step 5: Revert the temporary debug log**
 
-Remove the `console.log('[Sokuji] [Main] process.env.APPIMAGE ...')` line added in Step 1. (We will re-add it as a real field in Task 8, not as a console.log.)
+Remove the `console.log('[GM MeetMind] [Main] process.env.APPIMAGE ...')` line added in Step 1. (We will re-add it as a real field in Task 8, not as a console.log.)
 
 - [ ] **Step 6: Commit if any fixes were required**
 
@@ -462,7 +462,7 @@ this.isAppImage = process.platform === 'linux' && !!process.env.APPIMAGE;
 Also log it once for easier debugging:
 ```js
 if (process.platform === 'linux') {
-  console.log(`[Sokuji] [UpdateManager] Linux runtime: isAppImage=${this.isAppImage}, APPIMAGE=${process.env.APPIMAGE || '<unset>'}`);
+  console.log(`[GM MeetMind] [UpdateManager] Linux runtime: isAppImage=${this.isAppImage}, APPIMAGE=${process.env.APPIMAGE || '<unset>'}`);
 }
 ```
 

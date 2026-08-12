@@ -507,7 +507,7 @@ useEffect(() => {
     .getRecorder()
     .setNoiseSuppressionMode(noiseSuppressionMode)
     .catch((error: unknown) => {
-      console.error('[Sokuji] [MainPanel] Failed to set noise suppression mode:', error);
+      console.error('[GM MeetMind] [MainPanel] Failed to set noise suppression mode:', error);
     });
 }, [noiseSuppressionMode, isSessionActive, speakerChannelActive]);
 ```

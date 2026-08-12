@@ -541,7 +541,7 @@ export class OpenAIWebRTCClient implements IClient {
     this.turnDetectionDisabled = turnDetectionDisabled;
 
     if (session.reasoning) {
-      console.info('[Sokuji] [OpenAIWebRTCClient] reasoning.effort applied:', config.reasoningEffort);
+      console.info('[GM MeetMind] [OpenAIWebRTCClient] reasoning.effort applied:', config.reasoningEffort);
     }
 
     this.sendEvent({
