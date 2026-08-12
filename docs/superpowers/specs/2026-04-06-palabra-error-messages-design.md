@@ -64,7 +64,7 @@ The outer catch block in `connectConversation()` (around line 1269) currently on
 
 ```typescript
 } catch (error: any) {
-  console.error('[Sokuji] [MainPanel] Failed to initialize session:', error);
+  console.error('[GM MeetMind] [MainPanel] Failed to initialize session:', error);
 
   // Show error in conversation panel so it's visible to user
   const errorMessage = error.message || 'Network connection error';

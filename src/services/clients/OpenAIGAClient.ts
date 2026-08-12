@@ -629,7 +629,7 @@ export class OpenAIGAClient implements IClient {
     this.turnDetectionDisabled = turnDetectionDisabled;
 
     if (session.reasoning) {
-      console.info('[Sokuji] [OpenAIGAClient] reasoning.effort applied:', config.reasoningEffort);
+      console.info('[GM MeetMind] [OpenAIGAClient] reasoning.effort applied:', config.reasoningEffort);
     }
 
     this.rt.send({

@@ -17,28 +17,28 @@ const path = require('path');
  */
 async function createVirtualAudioDevices() {
   try {
-    console.log('[Sokuji] [macOS Audio] Checking for Sokuji Virtual Audio devices...');
+    console.log('[GM MeetMind] [macOS Audio] Checking for Sokuji Virtual Audio devices...');
 
     // Check if our custom driver is installed
     const isInstalled = await isSokujiVirtualAudioInstalled();
 
     if (isInstalled) {
-      console.log('[Sokuji] [macOS Audio] Sokuji Virtual Audio is installed and ready');
+      console.log('[GM MeetMind] [macOS Audio] Sokuji Virtual Audio is installed and ready');
       return true;
     }
 
-    console.log('[Sokuji] [macOS Audio] Sokuji Virtual Audio not detected');
-    console.log('[Sokuji] [macOS Audio] Virtual audio driver not found. This may happen if:');
-    console.log('[Sokuji] [macOS Audio] - The application was not installed via the official PKG installer');
-    console.log('[Sokuji] [macOS Audio] - The PKG installer driver installation failed');
-    console.log('[Sokuji] [macOS Audio] - macOS security settings blocked the driver');
-    console.log('[Sokuji] [macOS Audio] - System requires restart to load the driver');
-    console.log('[Sokuji] [macOS Audio] Please reinstall Sokuji using the official PKG installer');
-    console.log('[Sokuji] [macOS Audio] If the problem persists, try restarting your Mac');
-    console.log('[Sokuji] [macOS Audio] Application will continue without virtual microphone support');
+    console.log('[GM MeetMind] [macOS Audio] Sokuji Virtual Audio not detected');
+    console.log('[GM MeetMind] [macOS Audio] Virtual audio driver not found. This may happen if:');
+    console.log('[GM MeetMind] [macOS Audio] - The application was not installed via the official PKG installer');
+    console.log('[GM MeetMind] [macOS Audio] - The PKG installer driver installation failed');
+    console.log('[GM MeetMind] [macOS Audio] - macOS security settings blocked the driver');
+    console.log('[GM MeetMind] [macOS Audio] - System requires restart to load the driver');
+    console.log('[GM MeetMind] [macOS Audio] Please reinstall Sokuji using the official PKG installer');
+    console.log('[GM MeetMind] [macOS Audio] If the problem persists, try restarting your Mac');
+    console.log('[GM MeetMind] [macOS Audio] Application will continue without virtual microphone support');
     return false;
   } catch (error) {
-    console.error('[Sokuji] [macOS Audio] Error checking virtual audio devices:', error);
+    console.error('[GM MeetMind] [macOS Audio] Error checking virtual audio devices:', error);
     return false;
   }
 }
@@ -48,8 +48,8 @@ async function createVirtualAudioDevices() {
  * Note: Sokuji Virtual Audio devices are system-level and don't need cleanup
  */
 function removeVirtualAudioDevices() {
-  console.log('[Sokuji] [macOS Audio] Virtual audio device cleanup...');
-  console.log('[Sokuji] [macOS Audio] Note: Sokuji Virtual Audio devices are system-level and persist after application exit');
+  console.log('[GM MeetMind] [macOS Audio] Virtual audio device cleanup...');
+  console.log('[GM MeetMind] [macOS Audio] Note: Sokuji Virtual Audio devices are system-level and persist after application exit');
   // Sokuji Virtual Audio doesn't require cleanup - it's a system driver
 }
 
@@ -59,18 +59,18 @@ function removeVirtualAudioDevices() {
  */
 async function isMacOSAudioAvailable() {
   try {
-    console.log('[Sokuji] [macOS Audio] Checking Core Audio availability...');
+    console.log('[GM MeetMind] [macOS Audio] Checking Core Audio availability...');
 
     // Check if we can list audio devices using system_profiler
     const { stdout } = await execPromise('system_profiler SPAudioDataType 2>/dev/null');
 
     // Core Audio is available if we can get audio device information
     const isAvailable = stdout.includes('Audio:') || stdout.includes('Devices:');
-    console.log('[Sokuji] [macOS Audio] Core Audio available:', isAvailable);
+    console.log('[GM MeetMind] [macOS Audio] Core Audio available:', isAvailable);
 
     return isAvailable;
   } catch (error) {
-    console.error('[Sokuji] [macOS Audio] Error checking Core Audio availability:', error);
+    console.error('[GM MeetMind] [macOS Audio] Error checking Core Audio availability:', error);
     return false;
   }
 }
@@ -81,15 +81,15 @@ async function isMacOSAudioAvailable() {
  * @returns {Promise<boolean>} Always returns true
  */
 async function cleanupOrphanedDevices() {
-  console.log('[Sokuji] [macOS Audio] Orphaned device check...');
-  console.log('[Sokuji] [macOS Audio] Sokuji Virtual Audio manages its own state automatically');
+  console.log('[GM MeetMind] [macOS Audio] Orphaned device check...');
+  console.log('[GM MeetMind] [macOS Audio] Sokuji Virtual Audio manages its own state automatically');
 
   // Check if there are any stuck audio processes we should clean
   try {
     // Kill any orphaned coreaudiod processes if needed (rare)
     const { stdout } = await execPromise('ps aux | grep -i "sokuji.*audio" | grep -v grep');
     if (stdout) {
-      console.log('[Sokuji] [macOS Audio] Found Sokuji Virtual Audio-related processes:', stdout.trim());
+      console.log('[GM MeetMind] [macOS Audio] Found Sokuji Virtual Audio-related processes:', stdout.trim());
     }
   } catch (error) {
     // No processes found, which is fine
@@ -104,19 +104,19 @@ async function cleanupOrphanedDevices() {
  */
 async function isSokujiVirtualAudioInstalled() {
   try {
-    console.log('[Sokuji] [macOS Audio] Checking Sokuji Virtual Audio installation...');
+    console.log('[GM MeetMind] [macOS Audio] Checking Sokuji Virtual Audio installation...');
 
     // Method 1: Check if driver file exists
     try {
       await fs.access('/Library/Audio/Plug-Ins/HAL/SokujiVirtualAudio.driver');
-      console.log('[Sokuji] [macOS Audio] Sokuji Virtual Audio driver found in HAL Plug-Ins');
+      console.log('[GM MeetMind] [macOS Audio] Sokuji Virtual Audio driver found in HAL Plug-Ins');
 
       // Check if installation flag exists
       try {
         await fs.access('/Library/Audio/Plug-Ins/HAL/.sokuji_installed');
-        console.log('[Sokuji] [macOS Audio] Installation flag confirmed');
+        console.log('[GM MeetMind] [macOS Audio] Installation flag confirmed');
       } catch (flagError) {
-        console.log('[Sokuji] [macOS Audio] Installation flag missing, but driver exists');
+        console.log('[GM MeetMind] [macOS Audio] Installation flag missing, but driver exists');
       }
 
       return true;
@@ -129,11 +129,11 @@ async function isSokujiVirtualAudioInstalled() {
       const { stdout } = await execPromise('system_profiler SPAudioDataType 2>/dev/null');
 
       if (stdout.includes('Sokuji Virtual Audio') || stdout.includes('SokujiVirtualAudio')) {
-        console.log('[Sokuji] [macOS Audio] Sokuji Virtual Audio device found in system');
+        console.log('[GM MeetMind] [macOS Audio] Sokuji Virtual Audio device found in system');
         return true;
       }
     } catch (spError) {
-      console.log('[Sokuji] [macOS Audio] system_profiler query failed:', spError.message);
+      console.log('[GM MeetMind] [macOS Audio] system_profiler query failed:', spError.message);
     }
 
     // Method 3: Check using osascript
@@ -142,17 +142,17 @@ async function isSokujiVirtualAudioInstalled() {
       const { stdout } = await execPromise(osascriptCommand);
 
       if (stdout.trim() === 'true') {
-        console.log('[Sokuji] [macOS Audio] Sokuji Virtual Audio found via osascript');
+        console.log('[GM MeetMind] [macOS Audio] Sokuji Virtual Audio found via osascript');
         return true;
       }
     } catch (osascriptError) {
-      console.log('[Sokuji] [macOS Audio] osascript query failed:', osascriptError.message);
+      console.log('[GM MeetMind] [macOS Audio] osascript query failed:', osascriptError.message);
     }
 
-    console.log('[Sokuji] [macOS Audio] Sokuji Virtual Audio not detected by any method');
+    console.log('[GM MeetMind] [macOS Audio] Sokuji Virtual Audio not detected by any method');
     return false;
   } catch (error) {
-    console.error('[Sokuji] [macOS Audio] Error checking Sokuji Virtual Audio installation:', error);
+    console.error('[GM MeetMind] [macOS Audio] Error checking Sokuji Virtual Audio installation:', error);
     return false;
   }
 }
@@ -164,7 +164,7 @@ async function isSokujiVirtualAudioInstalled() {
  */
 async function getAudioDevices() {
   try {
-    console.log('[Sokuji] [macOS Audio] Enumerating audio devices...');
+    console.log('[GM MeetMind] [macOS Audio] Enumerating audio devices...');
 
     const inputs = [];
     const outputs = [];
@@ -223,14 +223,14 @@ async function getAudioDevices() {
       });
     }
 
-    console.log(`[Sokuji] [macOS Audio] Found ${inputs.length} input devices and ${outputs.length} output devices`);
+    console.log(`[GM MeetMind] [macOS Audio] Found ${inputs.length} input devices and ${outputs.length} output devices`);
 
     return {
       inputs,
       outputs
     };
   } catch (error) {
-    console.error('[Sokuji] [macOS Audio] Error enumerating audio devices:', error);
+    console.error('[GM MeetMind] [macOS Audio] Error enumerating audio devices:', error);
     return {
       inputs: [],
       outputs: [],
@@ -249,7 +249,7 @@ async function getAudioDevices() {
  * @returns {Promise<boolean>} True if system audio capture is supported
  */
 async function supportsSystemAudioCapture() {
-  console.log('[Sokuji] [macOS Audio] System audio capture is supported via electron-audio-loopback');
+  console.log('[GM MeetMind] [macOS Audio] System audio capture is supported via electron-audio-loopback');
   return true;
 }
 
@@ -275,9 +275,9 @@ async function listSystemAudioSources({ host = audioHost } = {}) {
   try {
     apps = await host.listAppSources();
   } catch (e) {
-    console.warn('[Sokuji] [macOS Audio] Application source listing failed:', e.message);
+    console.warn('[GM MeetMind] [macOS Audio] Application source listing failed:', e.message);
   }
-  console.log(`[Sokuji] [macOS Audio] Listing system audio sources: ${apps.length} application(s)`);
+  console.log(`[GM MeetMind] [macOS Audio] Listing system audio sources: ${apps.length} application(s)`);
   return [system, ...apps];
 }
 
@@ -290,7 +290,7 @@ async function listSystemAudioSources({ host = audioHost } = {}) {
  * @returns {Promise<{success: boolean, capture: 'app'|'system'}>} Result object
  */
 async function connectSystemAudioSource(sourceId, { host = audioHost } = {}) {
-  console.log(`[Sokuji] [macOS Audio] Connect system audio source: ${sourceId}`);
+  console.log(`[GM MeetMind] [macOS Audio] Connect system audio source: ${sourceId}`);
   // Both paths go through the helper on macOS. Whole-system capture used to use
   // getDisplayMedia, which requires Screen Recording; a global Core Audio tap
   // does the same job under the audio-capture grant the per-application path
@@ -304,7 +304,7 @@ async function connectSystemAudioSource(sourceId, { host = audioHost } = {}) {
  * @returns {Promise<{success: boolean}>} Result object
  */
 async function disconnectSystemAudioSource({ host = audioHost } = {}) {
-  console.log('[Sokuji] [macOS Audio] Disconnect system audio source');
+  console.log('[GM MeetMind] [macOS Audio] Disconnect system audio source');
   host.stopCapture();
   return { success: true };
 }

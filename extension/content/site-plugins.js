@@ -31,7 +31,7 @@ function parseI18nFromURL() {
             // Fallback to direct URI decoding if Base64 fails
             return decodeURIComponent(encodedValue);
           } catch (error2) {
-            console.warn('[Sokuji] [Plugins] Failed to decode i18n message, using fallback:', error2);
+            console.warn('[GM MeetMind] [Plugins] Failed to decode i18n message, using fallback:', error2);
             return fallback;
           }
         }
@@ -56,11 +56,11 @@ function parseI18nFromURL() {
         )
       };
       
-      console.info('[Sokuji] [Plugins] i18n messages parsed from URL parameters (Base64 decoded):', i18nMessages);
+      console.info('[GM MeetMind] [Plugins] i18n messages parsed from URL parameters (Base64 decoded):', i18nMessages);
       return i18nMessages;
     }
   } catch (error) {
-    console.warn('[Sokuji] [Plugins] Error parsing i18n from URL parameters:', error);
+    console.warn('[GM MeetMind] [Plugins] Error parsing i18n from URL parameters:', error);
   }
   
   // Fallback to default English messages
@@ -241,7 +241,7 @@ function showCommonGuidanceNotification(config) {
       try {
         localStorage.setItem(storageKey, 'true');
       } catch (e) {
-        console.warn(`[Sokuji] [${pluginName}] Could not store dismissal state:`, e);
+        console.warn(`[GM MeetMind] [${pluginName}] Could not store dismissal state:`, e);
       }
     });
 
@@ -290,11 +290,11 @@ function showCommonGuidanceNotification(config) {
   } else if (document.documentElement) {
     document.documentElement.appendChild(notification);
   } else {
-    console.error(`[Sokuji] [${pluginName}] Cannot show audio guidance - no suitable parent element found`);
+    console.error(`[GM MeetMind] [${pluginName}] Cannot show audio guidance - no suitable parent element found`);
     return;
   }
 
-  console.info(`[Sokuji] [${pluginName}] ${pluginName} audio guidance notification shown`);
+  console.info(`[GM MeetMind] [${pluginName}] ${pluginName} audio guidance notification shown`);
 }
 
 // ============================================================================
@@ -307,7 +307,7 @@ const gatherTownPlugin = {
   hostname: 'app.gather.town',
   
   init() {
-    console.info('[Sokuji] [Gather] Gather Town plugin initialized');
+    console.info('[GM MeetMind] [Gather] Gather Town plugin initialized');
   },
 
   showGuidance(messages) {
@@ -334,7 +334,7 @@ const wherebyPlugin = {
   hostname: 'whereby.com',
   
   init() {
-    console.info('[Sokuji] [Whereby] Whereby plugin initialized');
+    console.info('[GM MeetMind] [Whereby] Whereby plugin initialized');
   },
 
   showGuidance(messages) {
@@ -361,7 +361,7 @@ const discordPlugin = {
   hostname: 'discord.com',
   
   init() {
-    console.info('[Sokuji] [Discord] Discord plugin initialized');
+    console.info('[GM MeetMind] [Discord] Discord plugin initialized');
   },
 
   showGuidance(messages) {
@@ -388,7 +388,7 @@ const slackPlugin = {
   hostname: 'app.slack.com',
 
   init() {
-    console.info('[Sokuji] [Slack] Slack plugin initialized');
+    console.info('[GM MeetMind] [Slack] Slack plugin initialized');
   },
 
   showGuidance(messages) {
@@ -415,7 +415,7 @@ const teamsPlugin = {
   hostname: ['teams.live.com', 'teams.microsoft.com', 'teams.cloud.microsoft'],
 
   init() {
-    console.info('[Sokuji] [Teams] Microsoft Teams plugin initialized');
+    console.info('[GM MeetMind] [Teams] Microsoft Teams plugin initialized');
   },
 
   showGuidance(messages) {
@@ -442,7 +442,7 @@ const jitsiPlugin = {
   hostname: 'meet.jit.si',
 
   init() {
-    console.info('[Sokuji] [Jitsi] Jitsi Meet plugin initialized');
+    console.info('[GM MeetMind] [Jitsi] Jitsi Meet plugin initialized');
   },
 
   showGuidance(messages) {
@@ -504,10 +504,10 @@ function loadCurrentSitePlugin() {
 
   if (plugin) {
     window.sokujiSitePlugin = plugin;
-    console.info('[Sokuji] [Plugins] Loaded plugin for current site:', plugin.name, '(' + currentHostname + ')');
+    console.info('[GM MeetMind] [Plugins] Loaded plugin for current site:', plugin.name, '(' + currentHostname + ')');
   } else {
     window.sokujiSitePlugin = null;
-    console.info('[Sokuji] [Plugins] No specific plugin found for current site:', currentHostname);
+    console.info('[GM MeetMind] [Plugins] No specific plugin found for current site:', currentHostname);
   }
   
   return window.sokujiSitePlugin;
@@ -521,7 +521,7 @@ loadCurrentSitePlugin();
 // ============================================================================
 
 (function() {
-  console.info('[Sokuji] [Page] Plugin initialization script running in page context');
+  console.info('[GM MeetMind] [Page] Plugin initialization script running in page context');
   
   // Detect current site
   function getCurrentSite() {
@@ -534,14 +534,14 @@ loadCurrentSitePlugin();
     
     // Check if plugin is loaded
     if (window.sokujiSitePlugin === undefined) {
-      console.warn('[Sokuji] [Page] Site plugin not loaded yet, retrying...');
+      console.warn('[GM MeetMind] [Page] Site plugin not loaded yet, retrying...');
       setTimeout(initSitePlugin, 100);
       return;
     }
     
     // Check if i18n messages are loaded
     if (!window.sokujiI18nMessages) {
-      console.warn('[Sokuji] [Page] i18n messages not loaded yet, retrying...');
+      console.warn('[GM MeetMind] [Page] i18n messages not loaded yet, retrying...');
       setTimeout(initSitePlugin, 100);
       return;
     }
@@ -549,7 +549,7 @@ loadCurrentSitePlugin();
     const plugin = window.sokujiSitePlugin;
     
     if (plugin) {
-      console.info('[Sokuji] [Page] Initializing ' + plugin.name + ' plugin for ' + currentSite);
+      console.info('[GM MeetMind] [Page] Initializing ' + plugin.name + ' plugin for ' + currentSite);
       try {
         plugin.init();
         if (plugin.monitorAudio) {
@@ -571,10 +571,10 @@ loadCurrentSitePlugin();
           }, 3000);
         }
       } catch (error) {
-        console.error('[Sokuji] [Page] Error initializing ' + plugin.name + ' plugin:', error);
+        console.error('[GM MeetMind] [Page] Error initializing ' + plugin.name + ' plugin:', error);
       }
     } else {
-      console.info('[Sokuji] [Page] No specific plugin found for ' + currentSite + ', using generic functionality');
+      console.info('[GM MeetMind] [Page] No specific plugin found for ' + currentSite + ', using generic functionality');
     }
   }
   

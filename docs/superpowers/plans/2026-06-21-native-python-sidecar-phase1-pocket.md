@@ -709,9 +709,9 @@ class NativeHostManager {
         if (port) { this.port = port; rl.off('line', onLine); resolve({ port }); }
       };
       rl.on('line', onLine);
-      child.stderr.on('data', (d) => console.error('[Sokuji] [native-host]', d.toString().trim()));
+      child.stderr.on('data', (d) => console.error('[GM MeetMind] [native-host]', d.toString().trim()));
       child.on('exit', (code) => {
-        console.warn('[Sokuji] [native-host] exited', code);
+        console.warn('[GM MeetMind] [native-host] exited', code);
         this.proc = null; this.port = null; this._starting = null;
       });
       child.on('error', (err) => { this._starting = null; reject(err); });

@@ -135,7 +135,7 @@ if (isElectron() && !isExtension()) {
     if (isLoopbackPlatform()) {
       const granted = await audioServiceRef.current!.requestLoopbackAudioStream();
       if (!granted) {
-        console.warn('[Sokuji] [MainPanel] Loopback permission denied; skipping participant');
+        console.warn('[GM MeetMind] [MainPanel] Loopback permission denied; skipping participant');
         addRealtimeEvent(
           { type: 'session.init_error', data: { message: t('audioPanel.screenRecordingDenied', 'Screen recording permission denied. Cannot capture participant audio.') } },
           'client', 'session.init_error'
@@ -149,7 +149,7 @@ if (isElectron() && !isExtension()) {
       await audioServiceRef.current!.connectSystemAudioSource('desktop-audio-loopback');
     }
   } catch (error) {
-    console.error('[Sokuji] [MainPanel] Failed to acquire participant audio:', error);
+    console.error('[GM MeetMind] [MainPanel] Failed to acquire participant audio:', error);
     participantClientRef.current = null;
   }
 }
@@ -172,7 +172,7 @@ if (isElectron() && !isExtension() && audioServiceRef.current) {
   try {
     await audioServiceRef.current.disconnectSystemAudioSource();
   } catch (error) {
-    console.warn('[Sokuji] [MainPanel] Failed to disconnect system audio source:', error);
+    console.warn('[GM MeetMind] [MainPanel] Failed to disconnect system audio source:', error);
   }
 }
 ```
@@ -222,7 +222,7 @@ Locate `createAudioDataCallback`:
 const createAudioDataCallback = (client: IClient) => (data: { mono: Int16Array; raw: Int16Array }) => {
   if (client) {
     if (participantAudioCallbackCount % 100 === 0) {
-      console.debug(`[Sokuji] [MainPanel] Sending ${captureMode} audio to client: chunk ${participantAudioCallbackCount}, PCM length: ${data.mono.length}`);
+      console.debug(`[GM MeetMind] [MainPanel] Sending ${captureMode} audio to client: chunk ${participantAudioCallbackCount}, PCM length: ${data.mono.length}`);
     }
     participantAudioCallbackCount++;
     client.appendInputAudio(data.mono);
@@ -239,7 +239,7 @@ const createAudioDataCallback = (client: IClient) => (data: { mono: Int16Array; 
   // Read state per invocation to avoid stale closures.
   if (useAudioStore.getState().isParticipantMuted) return;
   if (participantAudioCallbackCount % 100 === 0) {
-    console.debug(`[Sokuji] [MainPanel] Sending ${captureMode} audio to client: chunk ${participantAudioCallbackCount}, PCM length: ${data.mono.length}`);
+    console.debug(`[GM MeetMind] [MainPanel] Sending ${captureMode} audio to client: chunk ${participantAudioCallbackCount}, PCM length: ${data.mono.length}`);
   }
   participantAudioCallbackCount++;
   client.appendInputAudio(data.mono);
@@ -763,7 +763,7 @@ private setupExtensionPassthroughListener(): void {
     const ctx = this.getPassthroughAudioContext?.();
     if (ctx && typeof (ctx as any).setSinkId === 'function') {
       (ctx as any).setSinkId('default').catch((err: unknown) => {
-        console.warn('[Sokuji] [ModernBrowserAudio] Failed to re-apply default sink:', err);
+        console.warn('[GM MeetMind] [ModernBrowserAudio] Failed to re-apply default sink:', err);
       });
     }
   };

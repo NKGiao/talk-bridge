@@ -764,7 +764,7 @@ Modify the `initializePostHog().then(...)` callback (around line 144) to mount e
             errorTrackingCleanupRef.current = setupErrorTracking(client);
           }
           const analyticsEnd = performance.now();
-          console.log(`[Sokuji] Analytics initialized in ${Math.round(analyticsEnd - analyticsStart)}ms`);
+          console.log(`[GM MeetMind] Analytics initialized in ${Math.round(analyticsEnd - analyticsStart)}ms`);
         }).catch(error => {
 ```
 

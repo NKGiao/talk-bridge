@@ -147,10 +147,10 @@ export class OpenAIClient implements IClient {
       return { validation: error, models: [] };
     }
 
-    console.info("[Sokuji] [OpenAIClient] Available models:", models);
+    console.info("[GM MeetMind] [OpenAIClient] Available models:", models);
 
     const hasRealtimeModel = this.checkRealtimeModelAvailability(models);
-    console.info("[Sokuji] [OpenAIClient] Has realtime model:", hasRealtimeModel);
+    console.info("[GM MeetMind] [OpenAIClient] Has realtime model:", hasRealtimeModel);
 
     const filteredModels = this.filterRelevantModels(models);
 
@@ -546,7 +546,7 @@ export class OpenAIClient implements IClient {
     if (config.model?.startsWith('gpt-realtime-2') &&
         'reasoningEffort' in config && config.reasoningEffort) {
       updateParams.reasoning = { effort: config.reasoningEffort };
-      console.info('[Sokuji] [OpenAIClient] reasoning.effort applied:', config.reasoningEffort);
+      console.info('[GM MeetMind] [OpenAIClient] reasoning.effort applied:', config.reasoningEffort);
     }
 
     // Explicitly disable tools to prevent model drift from translator role

@@ -479,7 +479,7 @@ async function listAppSources({ exec = defaultExec } = {}) {
       .filter((s) => s.label !== CAPTURE_SINK_DESCRIPTION)
       .map(({ deviceId, label }) => ({ deviceId, label }));
   } catch (e) {
-    console.warn('[Sokuji] [PipeWire] Failed to list application audio sources:', e.message);
+    console.warn('[GM MeetMind] [PipeWire] Failed to list application audio sources:', e.message);
     return [];
   }
 }
@@ -540,7 +540,7 @@ async function disconnectAppSource({ exec = defaultExec } = {}) {
   try {
     await exec(`pactl unload-module ${captureModuleId}`);
   } catch (e) {
-    console.warn('[Sokuji] [PipeWire] Failed to unload capture sink:', e.message);
+    console.warn('[GM MeetMind] [PipeWire] Failed to unload capture sink:', e.message);
   }
   captureModuleId = null;
   return { success: true };
@@ -837,7 +837,7 @@ import { ParticipantAudioOptions } from './IParticipantAudioRecorder';
  */
 export class DeviceCaptureRecorder extends ParticipantRecorder {
   protected getLogPrefix(): string {
-    return '[Sokuji] [DeviceCaptureRecorder]';
+    return '[GM MeetMind] [DeviceCaptureRecorder]';
   }
 
   /**
@@ -1048,7 +1048,7 @@ Add this private method above `connectSystemAudioSource`:
 In `connectSystemAudioSource`, replace the body of the `try` block (lines 884-892) with:
 
 ```typescript
-      console.info(`[Sokuji] [ModernBrowserAudio] Connecting system audio source: ${sourceDeviceId}`);
+      console.info(`[GM MeetMind] [ModernBrowserAudio] Connecting system audio source: ${sourceDeviceId}`);
       const result = await window.electron.invoke('connect-system-audio-source', sourceDeviceId);
 
       if (result?.success === false) {
@@ -1063,7 +1063,7 @@ In `connectSystemAudioSource`, replace the body of the `try` block (lines 884-89
         this.currentMonitorDeviceId = await this.resolveMonitorDeviceId(result.monitorLabel);
         if (!this.currentMonitorDeviceId) {
           console.warn(
-            '[Sokuji] [ModernBrowserAudio] Application capture monitor not found; ' +
+            '[GM MeetMind] [ModernBrowserAudio] Application capture monitor not found; ' +
             'falling back to whole-system audio'
           );
         }
@@ -1072,7 +1072,7 @@ In `connectSystemAudioSource`, replace the body of the `try` block (lines 884-89
       this.systemAudioSourceConnected = true;
       this.currentSystemAudioSinkId = sourceDeviceId;
 
-      console.info(`[Sokuji] [ModernBrowserAudio] System audio source connected: ${sourceDeviceId}`);
+      console.info(`[GM MeetMind] [ModernBrowserAudio] System audio source connected: ${sourceDeviceId}`);
 ```
 
 In the same method's `catch` block, add `this.currentMonitorDeviceId = null;` beside the
@@ -1106,7 +1106,7 @@ Add this method directly after `startLoopbackRecording`:
     callback: AudioRecordingCallback
   ): Promise<void> {
     try {
-      console.info(`[Sokuji] [ModernBrowserAudio] Starting application audio capture from ${deviceId}`);
+      console.info(`[GM MeetMind] [ModernBrowserAudio] Starting application audio capture from ${deviceId}`);
       this.systemAudioRecorder = new DeviceCaptureRecorder(24000);
       this.systemAudioCallback = callback;
 
@@ -1122,9 +1122,9 @@ Add this method directly after `startLoopbackRecording`:
       });
 
       this.systemAudioRecordingActive = true;
-      console.info('[Sokuji] [ModernBrowserAudio] Application audio capture started');
+      console.info('[GM MeetMind] [ModernBrowserAudio] Application audio capture started');
     } catch (error) {
-      console.error('[Sokuji] [ModernBrowserAudio] Failed to start application audio capture:', error);
+      console.error('[GM MeetMind] [ModernBrowserAudio] Failed to start application audio capture:', error);
       await this.stopSystemAudioRecording();
       throw error;
     }
@@ -1300,7 +1300,7 @@ and its `set(...)`, populate the participant sources too:
           try {
             get().setParticipantSources(await (service as any).getSystemAudioSources());
           } catch (e) {
-            console.warn('[Sokuji] [AudioStore] Failed to list participant sources:', e);
+            console.warn('[GM MeetMind] [AudioStore] Failed to list participant sources:', e);
           }
         }
 ```

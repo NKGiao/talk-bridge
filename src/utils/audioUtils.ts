@@ -280,7 +280,7 @@ export const applyAudioProcessing = (
           node.disconnect();
         }
       } catch (error) {
-        console.warn('[Sokuji] [AudioUtils] Error during audio processing cleanup:', error);
+        console.warn('[GM MeetMind] [AudioUtils] Error during audio processing cleanup:', error);
       }
     };
 
@@ -289,7 +289,7 @@ export const applyAudioProcessing = (
       cleanup
     };
   } catch (error) {
-    console.error('[Sokuji] [AudioUtils] Error applying audio processing:', error);
+    console.error('[GM MeetMind] [AudioUtils] Error applying audio processing:', error);
     
     // Return the original source node if processing fails
     return {
@@ -328,7 +328,7 @@ export const createEchoCancellationSetup = (
         source.disconnect();
         destination.disconnect();
       } catch (error) {
-        console.warn('[Sokuji] [AudioUtils] Error during echo cancellation cleanup:', error);
+        console.warn('[GM MeetMind] [AudioUtils] Error during echo cancellation cleanup:', error);
       }
     };
 
@@ -337,7 +337,7 @@ export const createEchoCancellationSetup = (
       cleanup
     };
   } catch (error) {
-    console.error('[Sokuji] [AudioUtils] Error creating echo cancellation setup:', error);
+    console.error('[GM MeetMind] [AudioUtils] Error creating echo cancellation setup:', error);
     
     // Return the original stream if processing fails
     return {
@@ -410,7 +410,7 @@ export const analyzeAudioForFeedback = (
     try {
       analyser.disconnect();
     } catch (error) {
-      console.warn('[Sokuji] [AudioUtils] Error cleaning up feedback analyzer:', error);
+      console.warn('[GM MeetMind] [AudioUtils] Error cleaning up feedback analyzer:', error);
     }
   };
 };

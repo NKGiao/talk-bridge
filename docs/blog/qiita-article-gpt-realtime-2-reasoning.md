@@ -20,7 +20,7 @@ OpenAI の Realtime API ファミリの中で、**`gpt-realtime-2` だけが受�
 
 通常の chat completions では既に存在していた概念ですが、Realtime API にも降りてきました。しかも段階は 5 つ：`minimal` / `low` / `medium` / `high` / **`xhigh`**。最後の `xhigh` は OpenAI のドキュメント上もあまり目立たず、API リファレンスを読み込まないと気づきにくい存在です。
 
-本記事は、リアルタイム AI 翻訳アプリ **[Sokuji](https://github.com/kizuna-ai-lab/sokuji)** で `gpt-realtime-2` を組み込んだ際にわかった `reasoning.effort` の実装上の注意点と、**Scale AI Labs の AudioMultiChallenge ベンチマーク**に出ている定量データから、各段階の実用的な使い分け方をまとめます。
+本記事は、リアルタイム AI 翻訳アプリ **[GM MeetMind](https://github.com/kizuna-ai-lab/sokuji)** で `gpt-realtime-2` を組み込んだ際にわかった `reasoning.effort` の実装上の注意点と、**Scale AI Labs の AudioMultiChallenge ベンチマーク**に出ている定量データから、各段階の実用的な使い分け方をまとめます。
 
 シリーズの第 2 回：
 

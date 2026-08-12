@@ -21,7 +21,7 @@ class UpdateManager {
 
     // Log once at startup for easier debugging
     if (process.platform === 'linux') {
-      console.log(`[Sokuji] [UpdateManager] Linux runtime: isAppImage=${this.isAppImage}, APPIMAGE=${process.env.APPIMAGE || '<unset>'}`);
+      console.log(`[GM MeetMind] [UpdateManager] Linux runtime: isAppImage=${this.isAppImage}, APPIMAGE=${process.env.APPIMAGE || '<unset>'}`);
     }
 
     // Configure GitHub provider

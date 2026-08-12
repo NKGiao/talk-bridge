@@ -25,10 +25,10 @@ async function storeDistinctId(distinctId) {
   try {
     await chrome.storage.local.set({ posthog_distinct_id: distinctId });
     currentDistinctId = distinctId;
-    console.debug('[Sokuji] [Background] Stored distinct_id:', distinctId);
+    console.debug('[GM MeetMind] [Background] Stored distinct_id:', distinctId);
     return true;
   } catch (error) {
-    console.error('[Sokuji] [Background] Error storing distinct_id:', error);
+    console.error('[GM MeetMind] [Background] Error storing distinct_id:', error);
     return false;
   }
 }
@@ -51,7 +51,7 @@ async function updateUninstallURL(distinctId = null) {
     
     return true;
   } catch (error) {
-    console.error('[Sokuji] [Background] Error updating uninstall URL:', error);
+    console.error('[GM MeetMind] [Background] Error updating uninstall URL:', error);
     return false;
   }
 }

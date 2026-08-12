@@ -388,7 +388,7 @@ const ProviderSpecificSettings: React.FC<ProviderSpecificSettingsProps> = ({
     } else if (provider === Provider.LOCAL_INFERENCE) {
       updateLocalInferenceSettings({ [key]: value });
     } else {
-      console.warn('[Sokuji][ProviderSpecificSettings] Unsupported provider:', provider);
+      console.warn('[GM MeetMind][ProviderSpecificSettings] Unsupported provider:', provider);
     }
   };
 
@@ -721,7 +721,7 @@ const ProviderSpecificSettings: React.FC<ProviderSpecificSettingsProps> = ({
         
         await fetchAvailableModels(getAuthToken);
       } catch (error) {
-        console.error('[Sokuji][ProviderSpecificSettings] Error refreshing models:', error);
+        console.error('[GM MeetMind][ProviderSpecificSettings] Error refreshing models:', error);
       }
     };
 

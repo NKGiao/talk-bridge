@@ -18,7 +18,7 @@ ignorePublish: false
 
 OpenAI が 2026 年に公開した **gpt-realtime-translate** は、Speech-to-Speech 翻訳に特化した Realtime モデルです。通常の `gpt-realtime` 系（`-mini` / `-1.5` / `-2`）と同じ Realtime API ファミリですが、エンドポイントもイベント体系も別物で、**翻訳タスクに振り切った設計**になっています。
 
-本記事では、リアルタイム AI 翻訳アプリ **[Sokuji](https://github.com/kizuna-ai-lab/sokuji)**（v0.25 から対応）に gpt-realtime-translate を組み込む過程で踏んだ実装上の罠を 4 つ、コードと一緒に共有します。
+本記事では、リアルタイム AI 翻訳アプリ **[GM MeetMind](https://github.com/kizuna-ai-lab/sokuji)**（v0.25 から対応）に gpt-realtime-translate を組み込む過程で踏んだ実装上の罠を 4 つ、コードと一緒に共有します。
 
 OpenAI の公式 cookbook には載っていない、実装してはじめてわかる挙動を中心にまとめました。
 
@@ -339,7 +339,7 @@ WebRTC のほうが接続コストは高いですが、ストリーミングの 
 3. user / assistant で独立した silence timer が必要
 4. WebRTC ではエンドポイントとレスポンス形状が通常 Realtime と違う
 
-これらは公式 cookbook には載っていない挙動で、すべて [Sokuji](https://github.com/kizuna-ai-lab/sokuji) の実装で実際にハマったポイントです。OSS なので、ピンポイントで実装を見たい方は [`OpenAITranslateGAClient.ts`](https://github.com/kizuna-ai-lab/sokuji/blob/main/src/services/clients/OpenAITranslateGAClient.ts) と [`OpenAITranslateWebRTCClient.ts`](https://github.com/kizuna-ai-lab/sokuji/blob/main/src/services/clients/OpenAITranslateWebRTCClient.ts) を直接読んでください。
+これらは公式 cookbook には載っていない挙動で、すべて [GM MeetMind](https://github.com/kizuna-ai-lab/sokuji) の実装で実際にハマったポイントです。OSS なので、ピンポイントで実装を見たい方は [`OpenAITranslateGAClient.ts`](https://github.com/kizuna-ai-lab/sokuji/blob/main/src/services/clients/OpenAITranslateGAClient.ts) と [`OpenAITranslateWebRTCClient.ts`](https://github.com/kizuna-ai-lab/sokuji/blob/main/src/services/clients/OpenAITranslateWebRTCClient.ts) を直接読んでください。
 
 Sokuji は Chrome 拡張 / Electron どちらでも動きます。**Zoom、Google Meet、Microsoft Teams で同時通訳が必要な方**は試してみてください：
 

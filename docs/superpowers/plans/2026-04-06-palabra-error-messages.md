@@ -76,7 +76,7 @@ In `MainPanel.tsx`, replace the existing catch block (lines 1269-1283):
 ```typescript
 // BEFORE (lines 1269-1283):
     } catch (error: any) {
-      console.error('[Sokuji] [MainPanel] Failed to initialize session:', error);
+      console.error('[GM MeetMind] [MainPanel] Failed to initialize session:', error);
       
       // Track session initialization failure
       trackEvent('error_occurred', {
@@ -96,7 +96,7 @@ With:
 
 ```typescript
     } catch (error: any) {
-      console.error('[Sokuji] [MainPanel] Failed to initialize session:', error);
+      console.error('[GM MeetMind] [MainPanel] Failed to initialize session:', error);
 
       // Show error in conversation panel so it's visible to user
       const errorMessage = error.message || 'Network connection error';
