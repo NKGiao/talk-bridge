@@ -1,0 +1,136 @@
+.meeting-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--gm-ink, #182636);
+}
+
+.meeting-summary__status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 28px 12px;
+  color: var(--gm-ink-muted, #3d4f63);
+
+  p {
+    margin: 0;
+    max-width: 28rem;
+    line-height: 1.5;
+  }
+
+  svg {
+    color: var(--gm-accent, #1e79c1);
+  }
+}
+
+.meeting-summary__status--error {
+  color: var(--gm-danger, #b42318);
+
+  svg {
+    color: var(--gm-danger, #b42318);
+  }
+}
+
+.meeting-summary__spinner {
+  animation: meeting-summary-spin 0.9s linear infinite;
+}
+
+@keyframes meeting-summary-spin {
+  to { transform: rotate(360deg); }
+}
+
+.meeting-summary__heading {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 650;
+  color: var(--gm-ink, #182636);
+}
+
+.meeting-summary__meta {
+  margin: -8px 0 0;
+  font-size: 12px;
+  color: var(--gm-ink-subtle, #5a6b7d);
+}
+
+.meeting-summary__section {
+  h5 {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gm-ink-subtle, #5a6b7d);
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  li {
+    line-height: 1.5;
+  }
+}
+
+.meeting-summary__empty {
+  color: var(--gm-ink-subtle, #5a6b7d);
+  font-style: italic;
+}
+
+.meeting-summary__item-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--gm-ink-subtle, #5a6b7d);
+}
+
+.meeting-summary__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--gm-border, #cfd8e3);
+}
+
+.meeting-summary__primary,
+.meeting-summary__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+.meeting-summary__primary {
+  border: none;
+  background: var(--gm-accent, #1e79c1);
+  color: var(--gm-accent-fg, #fff);
+
+  &:hover {
+    background: var(--gm-accent-hover, #1767a6);
+  }
+}
+
+.meeting-summary__secondary {
+  border: 1px solid var(--gm-border, #cfd8e3);
+  background: var(--gm-bg-elevated, #fff);
+  color: var(--gm-ink, #182636);
+
+  &:hover {
+    background: var(--gm-accent-muted, #e5f2fb);
+    border-color: var(--gm-accent-soft, #60a5e4);
+  }
+}

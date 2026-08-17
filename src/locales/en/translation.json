@@ -539,7 +539,28 @@
     },
     "playItemAudio": "Play this item's audio",
     "toolbar": {
-      "export": "Export conversation"
+      "export": "Export conversation",
+      "summarize": "Summarize meeting"
+    },
+    "summary": {
+      "title": "Meeting summary",
+      "generating": "Generating a summary of this conversation…",
+      "noLlm": "Add an OpenAI or Gemini API key in Settings, and select that provider for translation. Meeting summaries use the same AI you translate with.",
+      "openSettings": "Open provider settings",
+      "copy": "Copy",
+      "download": "Download .md",
+      "regenerate": "Regenerate",
+      "overview": "Overview",
+      "keyPoints": "Key points",
+      "decisions": "Decisions",
+      "actionItems": "Action items",
+      "owner": "Owner",
+      "due": "Due",
+      "emptySection": "None captured",
+      "generatedWith": "Generated with {{model}}",
+      "copySuccess": "Summary copied to clipboard",
+      "copyFailed": "Failed to copy. Check browser permissions.",
+      "failed": "Could not generate a summary. Please try again."
     },
     "export": {
       "copyToClipboard": "Copy to clipboard",

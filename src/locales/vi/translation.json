@@ -539,7 +539,28 @@
     },
     "playItemAudio": "Phát âm thanh của mục này",
     "toolbar": {
-      "export": "Xuất hội thoại"
+      "export": "Xuất hội thoại",
+      "summarize": "Tóm tắt cuộc họp"
+    },
+    "summary": {
+      "title": "Tóm tắt cuộc họp",
+      "generating": "Đang tóm tắt cuộc hội thoại này…",
+      "noLlm": "Thêm khóa API OpenAI hoặc Gemini trong Cài đặt, rồi chọn nhà cung cấp đó để dịch. Tóm tắt cuộc họp dùng cùng AI đang dịch.",
+      "openSettings": "Mở cài đặt nhà cung cấp",
+      "copy": "Sao chép",
+      "download": "Tải xuống .md",
+      "regenerate": "Tạo lại",
+      "overview": "Tổng quan",
+      "keyPoints": "Điểm chính",
+      "decisions": "Quyết định",
+      "actionItems": "Việc cần làm",
+      "owner": "Người phụ trách",
+      "due": "Hạn",
+      "emptySection": "Không ghi nhận",
+      "generatedWith": "Tạo bởi {{model}}",
+      "copySuccess": "Đã sao chép tóm tắt vào clipboard",
+      "copyFailed": "Sao chép thất bại. Kiểm tra quyền trình duyệt.",
+      "failed": "Không tạo được tóm tắt. Vui lòng thử lại."
     },
     "export": {
       "copyToClipboard": "Sao chép vào clipboard",

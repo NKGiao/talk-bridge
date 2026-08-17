@@ -80,6 +80,7 @@ import DisplayModeButton from './DisplayModeButton';
 import ConversationRow from './ConversationRow';
 import { shouldShowItem } from './conversationFilter';
 import ExportButton from './ExportButton';
+import MeetingSummaryButton from './MeetingSummaryButton';
 import {
   useFloating, useClick, useDismiss, useRole, useInteractions, offset, flip, FloatingPortal,
 } from '@floating-ui/react';
@@ -3707,6 +3708,7 @@ const MainPanel: React.FC<MainPanelProps> = () => {
             >
               {conversationCompactMode ? <ChevronsUpDown size={14} /> : <ChevronsDownUp size={14} />}
             </button>
+            <MeetingSummaryButton combinedItems={combinedItems} />
             {/* Export */}
             <ExportButton
               combinedItems={combinedItems}
